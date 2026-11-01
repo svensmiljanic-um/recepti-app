@@ -1,0 +1,11 @@
+# urejevalnik in sistem
+.idea/
+.DS_Store
+Thumbs.db
+
+# lokalne nastavitve Postmana
+.postman/
+
+# okoljske spremenljivke in gesla
+.env
+.env.*

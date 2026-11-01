@@ -1,0 +1,21 @@
+$kind: http-request
+name: http://localhost:8080/api/recepti
+description: ""
+url: http://localhost:8080/api/recepti
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \    \"cas_priprave\": 140,\r
+
+    \    \"ime\": \"Mesna lazanja\",\r
+
+    \    \"navodila\": \"Olupimo in operemo čebulo ter jo na drobno sesekljamo. Zeleno operemo in sesekljamo. Korenček operemo, ostrgamo in na drobno sesekljamo. Slanino narežemo na manjše koščke. V ponvi razpustimo maslo in na njem na hitro prepražimo slanino, nato dodamo sesekljano čebulo, zeleno in korenček. Vse skupaj pražimo toliko časa, da čebula porumeni. Dodamo mleto meso, ga solimo in popopramo ter odišavimo z muškatnim oreščkom in lovorovim listom. Meso dobro prepražimo, da je enakomerno zapečeno, nato prilijemo kozarec vina. Ko tekočina izpari, dodamo pretlačen paradižnik. Mezgo razmešamo v zajemalki tople vode in jo dodamo v omako. Ko omaka zavre, zmanjšamo temperaturo in pokrito dušimo približno eno uro. Odstranimo lovorov list. Pečico segrejemo na 200 °C. Zavremo liter soljene vode in vanj postopoma polagamo lazanje ter jih kuhamo dve minuti. Nato jih s penovko pobiramo iz vode ter počasi ohladimo v skledi z mrzlo vodo. Pekač namastimo in na dno položimo plast kuhanih lazanj. Nadevamo plast mesne omake. Ponovno pokrijemo z lazanjami in nadaljujemo postopek, dokler ne porabimo vseh sestavin. Zadnjo plast prekrijemo z bešamelom in po vrhu potresemo parmezan. Lazanjo damo v pečico za 30 do 40 minut. Pečeno lazanjo vzamemo iz pečice in jo pustimo stati vsaj 30 minut, da se ohladi in učvrsti. Ohlajeno razrežemo, serviramo.\",\r
+
+    \    \"opis\": \"Ta sočna specialiteta je že vrsto let ena izmed bolj znanih in priljubljenih italijanskih jedi.\",\r
+
+    \    \"sestavine\": \"300 g mlete govedine, 50 g slanine, 50 g masla, 1 čebula, 1 korenček, 1 lovorjev list, 300g pretlačenega paradižnika, 2 žlici paradižnikove mezge, 1 ščepec soli, 1 ščepec popra\"\r
+
+    }\r\n"
+order: 1000
