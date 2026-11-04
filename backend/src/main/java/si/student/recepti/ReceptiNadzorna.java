@@ -78,7 +78,7 @@ public class ReceptiNadzorna {
         }
 
         // v obstoječi objekt prepišemo polja z novimi vrednostmi
-        recept.setIme((noviPodatki.getIme()));
+        recept.setIme(noviPodatki.getIme());
         recept.setOpis(noviPodatki.getOpis());
         recept.setSestavine(noviPodatki.getSestavine());
         recept.setNavodila(noviPodatki.getNavodila());

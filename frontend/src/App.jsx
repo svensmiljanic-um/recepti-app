@@ -129,16 +129,18 @@ function App() {
                             value={formData.ime}
                             onChange={handleChange}
                             required
+                            maxLength={255}
                             className="form-input"
                         />
                     </div>
 
                     <div className="input-group">
-                        <label>Kratek opis</label>
+                        <label>Opis</label>
                         <textarea
                             name="opis"
                             value={formData.opis}
                             onChange={handleChange}
+                            maxLength={255}
                             className="form-textarea short-textarea"
                         />
                     </div>
@@ -150,6 +152,7 @@ function App() {
                                 name="sestavine"
                                 value={formData.sestavine}
                                 onChange={handleChange}
+                                maxLength={2000}
                                 className="form-textarea medium-textarea"
                             />
                         </div>
@@ -159,6 +162,7 @@ function App() {
                                 name="navodila"
                                 value={formData.navodila}
                                 onChange={handleChange}
+                                maxLength={5000}
                                 className="form-textarea medium-textarea"
                             />
                         </div>
