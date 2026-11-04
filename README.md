@@ -30,8 +30,8 @@ Aplikacija uporabniku omogoča, da na enem mestu hrani svoje recepte. Zaledje (b
 **Funkcionalnosti**
 - dodajanje, pregledovanje (vseh in enega recepta), posodabljanje in brisanje receptov (CRUD),
 - iskanje receptov po imenu ali sestavinah (ne razlikuje velikih in malih črk),
-- paginacija seznama (3 recepti na stran, najnovejši so zgoraj).
-
+- paginacija seznama (obličje zahteva 3 recepte na stran, najnovejši so zgoraj).
+- 
 ### Podatkovni model
 
 Tabela `recepti` (ustvari se samodejno ob prvem zagonu zaledja):
@@ -49,14 +49,14 @@ Tabela `recepti` (ustvari se samodejno ob prvem zagonu zaledja):
 
 Osnovni naslov: `http://localhost:8080/api/recepti`
 
-| Metoda   | Pot                     | Opis                                               | Odgovor                |
-|----------|-------------------------|----------------------------------------------------|------------------------|
-| `GET`    | `/api/recepti`          | vrne vse recepte                                   | 200                    |
-| `GET`    | `/api/recepti/stran`    | vrne eno stran receptov, z iskanjem (`iskanje`, `stran`, `velikost`) | 200 |
-| `GET`    | `/api/recepti/{id}`     | vrne en recept                                     | 200 / 404              |
-| `POST`   | `/api/recepti`          | doda nov recept                                    | 200                    |
-| `PUT`    | `/api/recepti/{id}`     | posodobi obstoječi recept                          | 200 / 404              |
-| `DELETE` | `/api/recepti/{id}`     | izbriše recept                                     | 204 / 404              |
+| Metoda   | Pot                     | Opis                                                                                         | Odgovor                |
+|----------|-------------------------|----------------------------------------------------------------------------------------------|------------------------|
+| `GET`    | `/api/recepti`          | vrne vse recepte                                                                             | 200                    |
+| `GET`    | `/api/recepti/stran`    | vrne eno stran receptov, z iskanjem (`iskanje`, `stran`, `velikost`; privzeta velikost je 3) | 200 |
+| `GET`    | `/api/recepti/{id}`     | vrne en recept                                                                               | 200 / 404              |
+| `POST`   | `/api/recepti`          | doda nov recept                                                                              | 200                    |
+| `PUT`    | `/api/recepti/{id}`     | posodobi obstoječi recept                                                                    | 200 / 404              |
+| `DELETE` | `/api/recepti/{id}`     | izbriše recept                                                                               | 204 / 404              |
 
 Interaktivna dokumentacija (Swagger UI) je na `http://localhost:8080/swagger-ui/index.html`.
 
@@ -177,7 +177,7 @@ Pred zagonom morajo biti nameščeni:
 
 - [Git](https://git-scm.com/)
 - [JDK 21](https://adoptium.net/)
-- [Node.js](https://nodejs.org/) (LTS) in `npm`
+- [Node.js](https://nodejs.org/) 20.19+ ali 22.12+ (razvito z 24.13.0) in `npm`
 - [PostgreSQL](https://www.postgresql.org/download/) (zagnan na vratih `5432`)
 
 Maven ni potreben, ker projekt vsebuje Maven Wrapper (`mvnw`).
@@ -352,11 +352,10 @@ Projekt vsebuje samo privzeti test BackendApplicationTests, ki preveri zagon apl
 
 - Razredi: `PascalCase` (`ReceptiNadzorna`), metode in spremenljivke: `camelCase` (`pridobiVseRecepte`), paketi: male črke (`si.student.recepti`), konstante: `VELIKE_CRKE`.
 - Zamik: 4 presledki.
-- Ena odgovornost na razred: entiteta, repozitorij in kontroler so ločeni.
 - Kontroler vrača ustrezne HTTP statuse (200, 204, 404).
 - Polje `cas_priprave` ohranja ime iz podatkovnega modela, ker je enako ime uporabljeno tudi v bazi in v JSON-u. Za nova polja se uporablja `camelCase`.
 
-### JavaScript / React (obličje)
+### React (obličje)
 
 - Komponente: `PascalCase` (`App`), spremenljivke in funkcije: `camelCase`, funkcije za dogodke se začnejo s `handle` (`handleSubmit`).
 - Zamik: 4 presledki v `App.jsx`.
