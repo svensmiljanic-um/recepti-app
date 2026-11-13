@@ -32,12 +32,12 @@
 
 | Polje | Vsebina |
 |---|---|
-| **Primer uporabe:** | Ime oziroma kratek naziv primera uporabe. |
-| **ID:** | Enolična oznaka primera uporabe, na primer PU-03. |
-| **Cilj:** | Kaj želi uporabnik doseči s tem primerom uporabe? |
-| **Akterji:** | Kdo sodeluje (npr. končni uporabnik, sistem, administrator)? |
-| **Predpogoji:** | Kaj mora biti izpolnjeno, preden se primer uporabe lahko izvede? |
-| **Stanje sistema po PU:** | Ali se stanje sistema spremeni oziroma kakšno je po izvedbi? |
-| **Scenarij:** | Opišite običajni potek interakcije uporabnika s sistemom po korakih:<br> 1. Korak 1;<br> 2. Korak 2;<br> 3. … |
-| **Alternativni tokovi:** | Opišite možne drugačne poteke in navedite, pri katerem koraku se pojavijo (npr. 1a, 1b, 2a). |
-| **Izjeme:** | Kje lahko pride do napake in kako naj se sistem takrat odzove? |
+| **Primer uporabe:** | Dodajanje novega recepta |
+| **ID:** | PU-03 |
+| **Cilj:** | Uporabnik v aplikacijo vnese svoj recept, da se shrani in je viden drugim uporabnikom. |
+| **Akterji:** | Registriran uporabnik <br> Sistem |
+| **Predpogoji:** | Uporabnik mora biti prijavljen. <br> V sistemu morajo biti na voljo kategorije receptov. |
+| **Stanje sistema po PU:** | V bazi je nov recept z izbrano kategorijo, povezan z uporabnikom kot avtorjem. <br> Recept se prikaže na vrhu seznama receptov. |
+| **Scenarij:** | 1. Uporabnik izbere možnost "Dodaj nov recept". <br> 2. Sistem prikaže obrazec (naziv jedi, opis, sestavine, postopek priprave, čas priprave v minutah). <br> 3. Uporabnik izpolni obrazec. <br> 4. Uporabnik iz seznama kategorij izbere kategorijo recepta (vključen PU Določitev kategorije recepta). <br> 5. Uporabnik potrdi obrazec s pritiskom na "Dodaj recept". <br> 6. Sistem preveri, da je naziv jedi vpisan, da vnosi niso predolgi in da je izbrana kategorija. <br> 7. Sistem shrani recept in ga poveže z uporabnikom. <br> 8. Sistem izprazni obrazec, prikaže potrditev o uspešnem dodajanju in recept na vrhu seznama. |
+| **Alternativni tokovi:** | 1a. Uporabnik ni prijavljen: sistem izpiše opozorilo "Za dodajanje recepta je potrebna prijava." in ga preusmeri na prijavo. <br> 3a. Uporabnik ne vpiše časa priprave: sistem shrani 0 minut in časa pri receptu ne prikaže. <br> 3b. Uporabnik prekliče vnos: sistem zavrže vnesene podatke in prikaže seznam receptov. <br> 6a. Naziv jedi ni vpisan: sistem ob polju prikaže opozorilo in ostane na obrazcu (nazaj na korak 3). <br> 6b. Opis je daljši od 255, sestavine od 2000 ali postopek od 5000 znakov, ali pa je čas priprave negativen: sistem prikaže opozorilo ob ustreznem polju (nazaj na korak 3). <br> 6c. Kategorija ni izbrana: sistem prikaže opozorilo, da je treba izbrati kategorijo (nazaj na korak 4). |
+| **Izjeme:** | 1. Pri napaki pri shranjevanju v bazo sistem recepta ne ustvari in prikaže sporočilo "Recepta trenutno ni mogoče shraniti, poskusite kasneje.". Vneseni podatki ostanejo v obrazcu. <br> 2. Če zaledje ni dosegljivo, obličje prikaže obvestilo o napaki povezave in uporabniku omogoči, da poskusi znova. Vneseni podatki ostanejo v obrazcu. <br> 3. Če je prijava med vnosom potekla, sistem recepta ne shrani in uporabnika pozove k ponovni prijavi. |
