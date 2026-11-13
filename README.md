@@ -16,7 +16,7 @@ Predmet: Razvoj informacijskih sistemov (RIS) <br>
 
 - [Vizija projekta](#vizija-projekta)
 - [Besednjak](#besednjak)
-- [Diagram primerov uporabe](#diagram-primerov-uporabe)
+- [Diagram primera uporabe](#diagram-primera-uporabe)
 1. [O projektu](#1-o-projektu)
 2. [Uporabljene tehnologije](#2-uporabljene-tehnologije)
 3. [Struktura projekta](#3-struktura-projekta)
@@ -29,11 +29,12 @@ Predmet: Razvoj informacijskih sistemov (RIS) <br>
 ### Opis rešitve
 
 
-### Ključne funkcionalnosti
+#### Ključne funkcionalnosti
 
-## Obseg rešitve in omejitve
+### Obseg rešitve in omejitve
 
-### Besednjak
+---
+## Besednjak
 
 | Izraz                     | Razlaga |
 |---------------------------|---|
@@ -52,6 +53,11 @@ Predmet: Razvoj informacijskih sistemov (RIS) <br>
 | **Registriran uporabnik** | XYZ |
 | **Administrator**         | XYZ |
 | **Všečkanje**             |XYZ|
+---
+
+## Diagram primera uporabe
+![DPU](DPU.png)
+
 ---
 
 ## 1. O projektu
