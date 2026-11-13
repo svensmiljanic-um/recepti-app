@@ -48,10 +48,10 @@ Predmet: Razvoj informacijskih sistemov (RIS) <br>
 | **Iskanje receptov**      | Funkcija, s katero uporabnik poišče recepte glede na besedo v imenu ali med sestavinami. Iskanje ne razlikuje med velikimi in malimi črkami. |
 | **Stran seznama**         | Del seznama receptov, prikazan naenkrat. Aplikacija recepte razdeli na strani, da je pregledovanje lažje. |
 | **Shranjeni recept**      | Recept, ki je vpisan v aplikacijo in je na voljo za poznejši pregled ali spremembo. |
-| **Gost**                  | XYZ |
-| **Registriran uporabnik** | XYZ |
-| **Administrator**         | XYZ |
-| **Všečkanje**             |XYZ|
+| **Gost**                  | Obiskovalec, ki nima uporabniškega računa ali ni prijavljen. Lahko pregleduje in išče recepte, za funkcije, ki zahtevajo prijavo, pa se mora registrirati oziroma prijaviti. |
+| **Registriran uporabnik** | Uporabnik z ustvarjenim računom, ki je prijavljen v aplikacijo. Glede na dodeljene funkcije lahko upravlja svoje recepte in shranjuje recepte med všečkane. |
+| **Administrator**         | Uporabnik s posebnimi skrbniškimi pravicami za upravljanje vsebine aplikacije in pomoč pri njenem delovanju. |
+| **Všečkanje**             | Dejanje, s katerim prijavljen uporabnik označi recept kot priljubljenega. Recept se doda na njegov seznam všečkanih; s ponovnim pritiskom lahko všeček odstrani. |
 ---
 
 ## 1. O projektu
