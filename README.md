@@ -60,6 +60,9 @@ Tabela `recepti` (ustvari se samodejno ob prvem zagonu zaledja):
 | **Iskanje receptov** | Funkcija, s katero uporabnik poišče recepte glede na besedo v imenu ali med sestavinami. Iskanje ne razlikuje med velikimi in malimi črkami. |
 | **Stran seznama** | Del seznama receptov, prikazan naenkrat. Aplikacija recepte razdeli na strani, da je pregledovanje lažje. |
 | **Shranjeni recept** | Recept, ki je vpisan v aplikacijo in je na voljo za poznejši pregled ali spremembo. |
+| **Gost** | XYZ |
+|**Registriran uporabnik** | XYZ |
+|**Administrator** | XYZ |
 
 ### REST API
 
