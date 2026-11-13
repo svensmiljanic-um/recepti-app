@@ -63,6 +63,7 @@ Tabela `recepti` (ustvari se samodejno ob prvem zagonu zaledja):
 | **Gost** | XYZ |
 |**Registriran uporabnik** | XYZ |
 |**Administrator** | XYZ |
+|**Všečkanje**|XYZ|
 
 ### REST API
 
