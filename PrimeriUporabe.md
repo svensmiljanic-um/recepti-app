@@ -10,7 +10,7 @@
 | **Akterji:** | Kdo sodeluje (npr. končni uporabnik, sistem, administrator)? |
 | **Predpogoji:** | Kaj mora biti izpolnjeno, preden se primer uporabe lahko izvede? |
 | **Stanje sistema po PU:** | Ali se stanje sistema spremeni oziroma kakšno je po izvedbi? |
-| **Scenarij:** | Opišite običajni potek interakcije uporabnika s sistemom po korakih: 1. Korak 1; 2. Korak 2; 3. … |
+| **Scenarij:** | Opišite običajni potek interakcije uporabnika s sistemom po korakih:<br> 1. Korak 1;<br> 2. Korak 2;<br> 3. … |
 | **Alternativni tokovi:** | Opišite možne drugačne poteke in navedite, pri katerem koraku se pojavijo (npr. 1a, 1b, 2a). |
 | **Izjeme:** | Kje lahko pride do napake in kako naj se sistem takrat odzove? |
 
@@ -24,7 +24,7 @@
 | **Akterji:** | Kdo sodeluje (npr. končni uporabnik, sistem, administrator)? |
 | **Predpogoji:** | Kaj mora biti izpolnjeno, preden se primer uporabe lahko izvede? |
 | **Stanje sistema po PU:** | Ali se stanje sistema spremeni oziroma kakšno je po izvedbi? |
-| **Scenarij:** | Opišite običajni potek interakcije uporabnika s sistemom po korakih: 1. Korak 1; 2. Korak 2; 3. … |
+| **Scenarij:** | Opišite običajni potek interakcije uporabnika s sistemom po korakih:<br> 1. Korak 1;<br> 2. Korak 2;<br> 3. … |
 | **Alternativni tokovi:** | Opišite možne drugačne poteke in navedite, pri katerem koraku se pojavijo (npr. 1a, 1b, 2a). |
 | **Izjeme:** | Kje lahko pride do napake in kako naj se sistem takrat odzove? |
 
@@ -38,6 +38,6 @@
 | **Akterji:** | Kdo sodeluje (npr. končni uporabnik, sistem, administrator)? |
 | **Predpogoji:** | Kaj mora biti izpolnjeno, preden se primer uporabe lahko izvede? |
 | **Stanje sistema po PU:** | Ali se stanje sistema spremeni oziroma kakšno je po izvedbi? |
-| **Scenarij:** | Opišite običajni potek interakcije uporabnika s sistemom po korakih: 1. Korak 1; 2. Korak 2; 3. … |
+| **Scenarij:** | Opišite običajni potek interakcije uporabnika s sistemom po korakih:<br> 1. Korak 1;<br> 2. Korak 2;<br> 3. … |
 | **Alternativni tokovi:** | Opišite možne drugačne poteke in navedite, pri katerem koraku se pojavijo (npr. 1a, 1b, 2a). |
 | **Izjeme:** | Kje lahko pride do napake in kako naj se sistem takrat odzove? |
