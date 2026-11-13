@@ -65,6 +65,8 @@ Aplikacija je spletna in namenjena objavi besedilnih receptov. Slik, videoposnet
 
 ## Diagram primera uporabe
 ![DPU](DPU.png)
+
+- [Primeri uporabe](PrimeriUporabe.md)
 ---
 
 ## 1. O projektu
