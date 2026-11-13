@@ -5,14 +5,14 @@
 | Polje | Vsebina |
 |---|---|
 | **Primer uporabe:** | Všečkanje |
-| **ID:** | Enolična oznaka primera uporabe, na primer PU-01. |
+| **ID:** | PU-01 |
 | **Cilj:** | Uporabnik z všečkanjem pokaže svoje pozitino mnenje o nekem receptu. |
-| **Akterji:** | Kdo sodeluje (npr. končni uporabnik, sistem, administrator)? |
-| **Predpogoji:** | Kaj mora biti izpolnjeno, preden se primer uporabe lahko izvede? |
-| **Stanje sistema po PU:** | Ali se stanje sistema spremeni oziroma kakšno je po izvedbi? |
-| **Scenarij:** | Opišite običajni potek interakcije uporabnika s sistemom po korakih:<br> 1. Korak 1;<br> 2. Korak 2;<br> 3. … |
-| **Alternativni tokovi:** | Opišite možne drugačne poteke in navedite, pri katerem koraku se pojavijo (npr.<br> 1a <br> 1b <br> 2a <br>). |
-| **Izjeme:** | Kje lahko pride do napake in kako naj se sistem takrat odzove? |
+| **Akterji:** | Registriran uporabnik <br> Sistem |
+| **Predpogoji:** | Uporabnik mora biti prijavljen. <br> Nek recept mora obstajat. |
+| **Stanje sistema po PU:** | K številu všečkov nekega recepta se prišteje vrednost 1. <br> Všečkan recept se pojavi v seznamu všečkanih receptov uporabnika. |
+| **Scenarij:** | 1. Uporabnik pritisne na gumb "Všečkaj". <br> 2. Sistem preveri ali je uporabnik registriran. <br> 3. Sistem k številu všečkov recepta prišteje 1. <br> 4. Sistem recept shrani na seznam všečkanih receptov uporabnika. <br> 5. Sistem prikaže potrditev, da je bil recept všečkan. |
+| **Alternativni tokovi:** | 2a. Uporabnik ni registriran, izpiše se mu opozorilo v smislu: "Za všečkanje je potrebna prijava.". <br> 3b. Uporabnik ponovno pritisne gumb "Všečkaj". Sistem odstrani všeček in recept s seznama všečkanih receptov uporabnika. |
+| **Izjeme:** | 1. Pri napaki pri shranjevanju všečka sistem ne spremeni števila všečkov in uporabniku prikaže sporočilo, da všečka ni bilo mogoče shraniti. <br> 2. Če sistem ni dosegljiv, prikaže obvestilo o napaki povezave in uporabniku omogoči, da poskusi znova. |
 
 ## Primer uporabe 2
 | Polje | Vsebina                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
