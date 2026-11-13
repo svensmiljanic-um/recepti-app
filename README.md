@@ -3,12 +3,20 @@
 Spletna aplikacija za shranjevanje, pregledovanje, urejanje in brisanje receptov.
 Zaledje je narejeno v Spring Boot, obličje v Reactu, podatki pa so shranjeni v podatkovni bazi PostgreSQL.
 
-Avtor: Sven Smiljanić <br>
-Program: Informatika in podatkovne tehnologije (IPT) <br>
-Predmet Razvoj informacijskih sistemov (RIS) <br>
+## Člani skupine:
+- Sven Smiljanić
+- Žak Lipič
+- Luka Orešnik
 
+Program: Informatika in podatkovne tehnologije (IPT) <br>
+Predmet: Razvoj informacijskih sistemov (RIS) <br>
+
+---
 ## Kazalo
 
+- [Vizija projekta](#vizija-projekta)
+- [Besednjak](#besednjak)
+- [Diagram primerov uporabe](#diagram-primerov-uporabe)
 1. [O projektu](#1-o-projektu)
 2. [Uporabljene tehnologije](#2-uporabljene-tehnologije)
 3. [Struktura projekta](#3-struktura-projekta)
@@ -16,6 +24,34 @@ Predmet Razvoj informacijskih sistemov (RIS) <br>
 5. [Navodila za razvijalce](#5-navodila-za-razvijalce)
 6. [Standardi kodiranja](#6-standardi-kodiranja)
 
+---
+## Vizija projekta
+### Opis rešitve
+
+
+### Ključne funkcionalnosti
+
+## Obseg rešitve in omejitve
+
+### Besednjak
+
+| Izraz                     | Razlaga |
+|---------------------------|---|
+| **Recept**                | Zapis, ki opisuje pripravo določene jedi. V aplikaciji vsebuje ime, kratek opis, seznam sestavin, navodila za pripravo in predvideni čas priprave. |
+| **Ime recepta**           | Naziv jedi, po katerem uporabnik prepozna recept; uporablja se tudi pri iskanju. |
+| **Opis recepta**          | Kratek povzetek jedi, ki uporabniku pomaga oceniti, ali ga recept zanima. |
+| **Sestavina**             | Živilo ali drug element, potreben za pripravo jedi. Pri receptu je naveden skupaj s količino. |
+| **Količina sestavine**    | Mere ali število enot posamezne sestavine, potrebne za pripravo recepta, na primer 200 g ali 2 kosa. |
+| **Navodila za pripravo**  | Zaporedje korakov, ki uporabnika vodi od priprave sestavin do dokončane jedi. |
+| **Čas priprave**          | Predvideno število minut, potrebnih za pripravo jedi po receptu. |
+| **Seznam receptov**       | Prikaz shranjenih receptov, po katerem uporabnik lahko brska in izbira recept za ogled ali urejanje. |
+| **Iskanje receptov**      | Funkcija, s katero uporabnik poišče recepte glede na besedo v imenu ali med sestavinami. Iskanje ne razlikuje med velikimi in malimi črkami. |
+| **Stran seznama**         | Del seznama receptov, prikazan naenkrat. Aplikacija recepte razdeli na strani, da je pregledovanje lažje. |
+| **Shranjeni recept**      | Recept, ki je vpisan v aplikacijo in je na voljo za poznejši pregled ali spremembo. |
+| **Gost**                  | XYZ |
+| **Registriran uporabnik** | XYZ |
+| **Administrator**         | XYZ |
+| **Všečkanje**             |XYZ|
 ---
 
 ## 1. O projektu
@@ -31,9 +67,8 @@ Aplikacija uporabniku omogoča, da na enem mestu hrani svoje recepte. Zaledje (b
 - dodajanje, pregledovanje (vseh in enega recepta), posodabljanje in brisanje receptov (CRUD),
 - iskanje receptov po imenu ali sestavinah (ne razlikuje velikih in malih črk),
 - paginacija seznama (obličje zahteva 3 recepte na stran, najnovejši so zgoraj).
-- 
-### Podatkovni model
 
+### Podatkovni model
 Tabela `recepti` (ustvari se samodejno ob prvem zagonu zaledja):
 
 | Stolpec        | Tip                    | Opis                                  |
@@ -45,28 +80,9 @@ Tabela `recepti` (ustvari se samodejno ob prvem zagonu zaledja):
 | `navodila`     | `varchar(5000)`        | postopek priprave                     |
 | `cas_priprave` | `integer`              | čas priprave v minutah                |
 
-### Besednjak
 
-| Izraz | Razlaga |
-|---|---|
-| **Recept** | Zapis, ki opisuje pripravo določene jedi. V aplikaciji vsebuje ime, kratek opis, seznam sestavin, navodila za pripravo in predvideni čas priprave. |
-| **Ime recepta** | Naziv jedi, po katerem uporabnik prepozna recept; uporablja se tudi pri iskanju. |
-| **Opis recepta** | Kratek povzetek jedi, ki uporabniku pomaga oceniti, ali ga recept zanima. |
-| **Sestavina** | Živilo ali drug element, potreben za pripravo jedi. Pri receptu je naveden skupaj s količino. |
-| **Količina sestavine** | Mere ali število enot posamezne sestavine, potrebne za pripravo recepta, na primer 200 g ali 2 kosa. |
-| **Navodila za pripravo** | Zaporedje korakov, ki uporabnika vodi od priprave sestavin do dokončane jedi. |
-| **Čas priprave** | Predvideno število minut, potrebnih za pripravo jedi po receptu. |
-| **Seznam receptov** | Prikaz shranjenih receptov, po katerem uporabnik lahko brska in izbira recept za ogled ali urejanje. |
-| **Iskanje receptov** | Funkcija, s katero uporabnik poišče recepte glede na besedo v imenu ali med sestavinami. Iskanje ne razlikuje med velikimi in malimi črkami. |
-| **Stran seznama** | Del seznama receptov, prikazan naenkrat. Aplikacija recepte razdeli na strani, da je pregledovanje lažje. |
-| **Shranjeni recept** | Recept, ki je vpisan v aplikacijo in je na voljo za poznejši pregled ali spremembo. |
-| **Gost** | XYZ |
-|**Registriran uporabnik** | XYZ |
-|**Administrator** | XYZ |
-|**Všečkanje**|XYZ|
 
 ### REST API
-
 Osnovni naslov: `http://localhost:8080/api/recepti`
 
 | Metoda   | Pot                     | Opis                                                                                         | Odgovor                |
@@ -83,7 +99,6 @@ Interaktivna dokumentacija (Swagger UI) je na `http://localhost:8080/swagger-ui/
 ---
 
 ## 2. Uporabljene tehnologije
-
 ### Zaledje (`backend/`)
 
 | Tehnologija               | Verzija | Namen                                   |
@@ -106,7 +121,6 @@ Interaktivna dokumentacija (Swagger UI) je na `http://localhost:8080/swagger-ui/
 | Node.js     | 24.13.0 | izvajalno okolje                       |
 
 ### Podatkovna baza
-
 | Tehnologija | Verzija | Namen                |
 |-------------|---------|----------------------|
 | PostgreSQL  | 18      | podatkovna baza `recepti` |
@@ -114,7 +128,6 @@ Interaktivna dokumentacija (Swagger UI) je na `http://localhost:8080/swagger-ui/
 ---
 
 ## 3. Struktura projekta
-
 ```
 recepti-app/
 ├── README.md
@@ -154,7 +167,6 @@ recepti-app/
 ```
 
 ### Zaledje
-
 | Datoteka                  | Vsebina                                                                 |
 |---------------------------|-------------------------------------------------------------------------|
 | `BackendApplication.java` | vstopna točka, zažene Spring Boot                                       |
@@ -166,7 +178,6 @@ recepti-app/
 | `mvnw`, `mvnw.cmd`, `.mvn/` | Maven Wrapper: omogoča gradnjo in zagon brez nameščenega Mavena       |
 
 ### Obličje
-
 | Datoteka               | Vsebina                                                                       |
 |------------------------|-------------------------------------------------------------------------------|
 | `index.html`           | osnovna stran z elementom `root`                                              |
@@ -232,7 +243,6 @@ Uporabnik `postgres` ima geslo, ki je bilo nastavljeno ob namestitvi PostgreSQL.
 Tabele ni treba ustvariti ročno. Ob prvem zagonu jo ustvari Spring (`spring.jpa.hibernate.ddl-auto=update`).
 
 ### 4.4 Okoljske spremenljivke (zaledje)
-
 Podatki za povezavo z bazo se berejo iz okoljskih spremenljivk, zato v repozitoriju ni gesel.
 
 | Spremenljivka | Obvezna | Privzeta vrednost                          | Opis                          |
@@ -304,7 +314,6 @@ Obličje se zažene na `http://localhost:5173`. Naslov zaledja je določen v kon
 ---
 
 ## 5. Navodila za razvijalce
-
 ### 5.1 Delo z repozitorijem
 
 - Veja `main` vsebuje delujočo različico. Nanjo se ne piše neposredno.
@@ -350,7 +359,6 @@ Format: `tip: kratek opis v povedni obliki`
 | `refactor`  | preurejanje kode                       | `refactor: poenoti imena parametrov` |
 
 ### 5.4 Pred pull requestom
-
 - zaledje in obličje se zaženeta brez napak,
 - vse CRUD operacije delujejo (preveri v aplikaciji ali v Swaggerju),
 - novi end pointi imajo `@Operation` opis za Swagger,
@@ -359,7 +367,6 @@ Format: `tip: kratek opis v povedni obliki`
 Projekt vsebuje samo privzeti test BackendApplicationTests, ki preveri zagon aplikacije in zahteva delujočo bazo ter nastavljen `DB_PASSWORD`.
 
 ### 5.5 Dodajanje nove funkcionalnosti
-
 1. **Zaledje:** po potrebi razširi entiteto `Recepti`, dodaj metodo v `ReceptiRepository`, nov end point v `ReceptiNadzorna` in opis z `@Operation`.
 2. **Obličje:** dodaj stanje in klic z Axiosom v `App.jsx` ter stile v `App.css`.
 3. **Dokumentacija:** posodobi tabelo REST API in seznam funkcionalnosti v tem README.
