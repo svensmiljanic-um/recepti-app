@@ -4,9 +4,9 @@
 
 | Polje | Vsebina |
 |---|---|
-| **Primer uporabe:** | Ime oziroma kratek naziv primera uporabe. |
+| **Primer uporabe:** | Všečkanje |
 | **ID:** | Enolična oznaka primera uporabe, na primer PU-01. |
-| **Cilj:** | Kaj želi uporabnik doseči s tem primerom uporabe? |
+| **Cilj:** | Uporabnik z všečkanjem pokaže svoje pozitino mnenje o nekem receptu. |
 | **Akterji:** | Kdo sodeluje (npr. končni uporabnik, sistem, administrator)? |
 | **Predpogoji:** | Kaj mora biti izpolnjeno, preden se primer uporabe lahko izvede? |
 | **Stanje sistema po PU:** | Ali se stanje sistema spremeni oziroma kakšno je po izvedbi? |
@@ -18,7 +18,7 @@
 
 | Polje | Vsebina |
 |---|---|
-| **Primer uporabe:** | Ime oziroma kratek naziv primera uporabe. |
+| **Primer uporabe:** | Registracija uporabnika |
 | **ID:** | Enolična oznaka primera uporabe, na primer PU-02. |
 | **Cilj:** | Kaj želi uporabnik doseči s tem primerom uporabe? |
 | **Akterji:** | Kdo sodeluje (npr. končni uporabnik, sistem, administrator)? |
