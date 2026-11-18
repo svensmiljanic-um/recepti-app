@@ -27,10 +27,10 @@ Predmet: Razvoj informacijskih sistemov (RIS) <br>
 ---
 ## Vizija projekta
 ### Opis rešitve
-Aplikacija za recepte je spletno mesto, kjer ljudje delijo recepte in se o njih pogovarjajo. Na veliko spletnih straneh je pred samim receptom treba prebrati dolge uvode in oglase. Zato želimo preprosto stran, kjer je recept takoj viden in kjer lahko drugi uporabniki pod njim pustijo komentar ali ga všečkajo. Gost lahko recepte samo pregleduje, registriran uporabnik pa recepte objavlja in sodeluje v komentarjih. Administrator skrbi, da vsebina ostane primerna.
+Aplikacija za recepte je spletno mesto, kjer uporabniki delijo recepte in se o njih pogovarjajo. Namenjena je predvsem študentom in drugim začetnikom v kuhinji, ki si pripravljajo vsakdanje obroke in želijo najti preproste recepte. Na veliko spletnih straneh je pred samim receptom treba prebrati dolge uvode in oglase. Zato želimo preprosto stran, kjer je recept takoj viden in kjer lahko drugi uporabniki pod njim pustijo komentar ali ga všečkajo. Gost lahko recepte samo pregleduje, registriran uporabnik pa recepte objavlja in sodeluje v komentarjih. Administrator skrbi, da vsebina ostane primerna.
 
 ### Ključne funkcionalnosti
-- pregled receptov, filtriranje po kategorijah in iskanje,
+- ogled receptov in filtriranje po kategorijah,
 - objava lastnih receptov z določitvijo kategorije,
 - komentiranje receptov,
 - všečkanje receptov,
@@ -40,7 +40,7 @@ Aplikacija za recepte je spletno mesto, kjer ljudje delijo recepte in se o njih 
 ## Obseg rešitve in omejitve
 Aplikacija je spletna in namenjena objavi besedilnih receptov. Slik, videoposnetkov, zasebnih sporočil med uporabniki in ocen z zvezdicami v prvi različici ni. Komentarje lahko pišejo samo prijavljeni uporabniki, svojih komentarjev pa ne morejo urejati. Za vsebino skrbi administrator, avtomatskega filtriranja besedila ni.
 
-### Besednjak
+## Besednjak
 
 | Izraz                     | Razlaga |
 |---------------------------|---|
@@ -51,22 +51,20 @@ Aplikacija je spletna in namenjena objavi besedilnih receptov. Slik, videoposnet
 | **Količina sestavine**    | Mere ali število enot posamezne sestavine, potrebne za pripravo recepta, na primer 200 g ali 2 kosa. |
 | **Navodila za pripravo**  | Zaporedje korakov, ki uporabnika vodi od priprave sestavin do dokončane jedi. |
 | **Čas priprave**          | Predvideno število minut, potrebnih za pripravo jedi po receptu. |
-| **Seznam receptov**       | Prikaz shranjenih receptov, po katerem uporabnik lahko brska in izbira recept za ogled ali urejanje. |
-| **Iskanje receptov**      | Funkcija, s katero uporabnik poišče recepte glede na besedo v imenu ali med sestavinami. Iskanje ne razlikuje med velikimi in malimi črkami. |
-| **Stran seznama**         | Del seznama receptov, prikazan naenkrat. Aplikacija recepte razdeli na strani, da je pregledovanje lažje. |
-| **Shranjeni recept**      | Recept, ki je vpisan v aplikacijo in je na voljo za poznejši pregled ali spremembo. |
 | **Gost**                  | Obiskovalec, ki nima uporabniškega računa ali ni prijavljen. Lahko pregleduje in išče recepte, za funkcije, ki zahtevajo prijavo, pa se mora registrirati oziroma prijaviti. |
-| **Registriran uporabnik** | Uporabnik z ustvarjenim računom, ki je prijavljen v aplikacijo. Glede na dodeljene funkcije lahko upravlja svoje recepte in shranjuje recepte med všečkane. |
+| **Registriran uporabnik** | Uporabnik z ustvarjenim računom, ki je prijavljen v aplikacijo. Lahko dodaja, ureja in briše svoje recepte ter recepte všečka in komentira. |
 | **Administrator**         | Uporabnik s posebnimi skrbniškimi pravicami za upravljanje vsebine aplikacije in pomoč pri njenem delovanju. |
-| **Všečkanje**             | Dejanje, s katerim prijavljen uporabnik označi recept kot priljubljenega. Recept se doda na njegov seznam všečkanih; s ponovnim pritiskom lahko všeček odstrani. |
+| **Všečkanje**             | Dejanje, s katerim prijavljen uporabnik označi recept kot priljubljenega. Število všečkov je prikazano ob receptu; s ponovnim pritiskom lahko uporabnik svoj všeček odstrani. |
 | **Kategorija recepta**    | Skupina, v katero spada recept, na primer predjed, glavna jed ali sladica. Uporabnik jo izbere ob dodajanju recepta, po njej pa lahko gost ali registriran uporabnik recepte tudi filtrira. |
 | **Komentar**              | Besedilo, ki ga prijavljen uporabnik napiše pod receptom, da z drugimi deli mnenje ali nasvet. Komentar je viden vsem obiskovalcem, administrator pa ga lahko izbriše, če krši pravila. |
+
 ---
 
 ## Diagram primera uporabe
 ![DPU](docs/DPU.png)
 
 - [Primeri uporabe](docs/PrimeriUporabe.md)
+- [Uporabniške zgodbe in sprejemni kriteriji](docs/user-stories.md)
 ---
 
 ## 1. O projektu
