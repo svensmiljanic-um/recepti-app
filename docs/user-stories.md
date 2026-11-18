@@ -58,12 +58,14 @@
 5. **Given:** seznama kategorij ni mogoče naložiti.  
    **When:** uporabnik odpre izbiro kategorije.  
    **Then:** prikaže se opozorilo, filtriranje po kategoriji ni na voljo, seznam receptov pa je še vedno mogoče pregledovati in iskati brez tega filtra.
+
 **Podrobnosti implementacije:**
 - Zgodba je odvisna od US-01, ki doda kategorijo receptu in omogoči pridobitev seznama kategorij.
 - Za posamezen recept se uporablja ena kategorija. Uporabnik lahko izbere eno kategorijo ali »Vse kategorije«.
 - Backend razširi obstoječe paginirano iskanje tako, da izbrani kategoriji in iskalnemu nizu ustrezajo isti rezultati. Brez izbrane kategorije se obnašanje iskanja ne spremeni.
 - Frontend doda izbiro kategorije in jo poveže z obstoječim iskalnim poljem. Ob spremembi kategorije se seznam začne na prvi strani; ohranjena je paginacija treh receptov na stran in razvrščanje od najnovejšega do najstarejšega.
 - Če kategorij ni mogoče naložiti, uporabnik še vedno lahko išče in pregleduje recepte brez filtra kategorije.
+
 **Naloge (sub-issues):**
 - **US-02-T1 — Backend: filtriranje receptov po kategoriji.** Razširiti poizvedbo za seznam receptov tako, da upošteva izbrano kategorijo skupaj z iskalnim nizom in paginacijo. **Odgovoren:** Žak Lipič.
 - **US-02-T2 — Frontend: izbira kategorije in prikaz filtriranih rezultatov.** Dodati izbiro kategorije, povezati jo z obstoječim iskanjem, ob spremembi filtra ponastaviti stran in prikazati stanje brez rezultatov. **Odgovoren:** Žak Lipič.
