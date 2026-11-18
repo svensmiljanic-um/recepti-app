@@ -3,7 +3,7 @@
 | ID    | Zgodba                        | Odgovorni član   |
 |-------|-------------------------------|------------------|
 | US-01 | Določitev kategorije recepta  | Sven Smiljanić   |
-| US-02 |                               | Žak Lipič        |
+| US-02 | Filtriranje receptov po kategoriji | Žak Lipič        |
 | US-03 |                               | Luka Orešnik     |
 
 ## US-01: Določitev kategorije recepta
@@ -35,7 +35,7 @@
 - **US-01-T1:** Zaledje: polje `kategorija` v `Recepti` in end point za seznam kategorij. *Odgovoren: Sven Smiljanić.*
 - **US-01-T2:** Obličje: spustni seznam kategorij v obrazcu in prikaz kategorije ob receptu. *Odgovoren: Sven Smiljanić.*
 
-## US-02: XYZ
+## US-02: Filtriranje receptov po kategoriji
 
 **Odgovorni član:** Žak Lipič
 
