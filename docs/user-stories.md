@@ -35,6 +35,25 @@
 - **US-01-T1:** Zaledje: polje `kategorija` v `Recepti` in end point za seznam kategorij. *Odgovoren: Sven Smiljanić.*
 - **US-01-T2:** Obličje: spustni seznam kategorij v obrazcu in prikaz kategorije ob receptu. *Odgovoren: Sven Smiljanić.*
 
+## US-02: XYZ
+
+**Odgovorni član:** Žak Lipič
+
+**Zgodba:** Kot <vloga> želim <cilj>, da <korist>
+
+**Sprejemni kriteriji**
+
+1. **Given:** XYZ
+   **When:** XYZ
+   **Then:** XYZ
+2. **Given:** XYZ
+   **When:** XYZ
+   **Then:** XYZ
+   **Podrobnosti implementacije:**
+- XYZ
+- XYZ
+   **Naloge (sub-issues)**
+
 
 
 
