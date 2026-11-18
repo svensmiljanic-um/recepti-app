@@ -4,7 +4,7 @@
 |-------|-------------------------------|------------------|
 | US-01 | Določitev kategorije recepta  | Sven Smiljanić   |
 | US-02 | Filtriranje receptov po kategoriji | Žak Lipič        |
-| US-03 |                               | Luka Orešnik     |
+| US-03 | Všečkanje receptov            | Luka Orešnik     |
 
 ## US-01: Določitev kategorije recepta
 
@@ -70,6 +70,40 @@
 - **US-02-T1 — Backend: filtriranje receptov po kategoriji.** Razširiti poizvedbo za seznam receptov tako, da upošteva izbrano kategorijo skupaj z iskalnim nizom in paginacijo. **Odgovoren:** Žak Lipič.
 - **US-02-T2 — Frontend: izbira kategorije in prikaz filtriranih rezultatov.** Dodati izbiro kategorije, povezati jo z obstoječim iskanjem, ob spremembi filtra ponastaviti stran in prikazati stanje brez rezultatov. **Odgovoren:** Žak Lipič.
 
+
+## US-03: Všečkanje receptov
+
+**Odgovorni član:** Luka Orešnik
+
+**Prioriteta:** Srednja | **Ocena zahtevnosti:** 3 točke
+
+**Zgodba:** Kot uporabnik želim všečkati recept, da izrazim, da mi je všeč, in da drugi vidijo, kateri recepti so priljubljeni.
+
+**Sprejemni kriteriji:**
+
+1. **Given:** recept ima 0 všečkov in ga uporabnik še ni všečkal.
+   **When:** uporabnik pritisne gumb »Všečkaj«.
+   **Then:** ob receptu je prikazano število všečkov 1, gumb pa se spremeni v »Odstrani všeček«.
+2. **Given:** uporabnik je recept že všečkal in ima ta 1 všeček.
+   **When:** uporabnik pritisne gumb »Odstrani všeček«.
+   **Then:** število všečkov je 0 in gumb se spremeni nazaj v »Všečkaj«.
+3. **Given:** recept ima 5 všečkov in strežnik ni dosegljiv.
+   **When:** uporabnik pritisne gumb »Všečkaj«.
+   **Then:** prikaže se sporočilo »Všečka ni bilo mogoče shraniti«, število všečkov ostane 5.
+4. **Given:** recept ima 5 všečkov, od tega je enega dodal uporabnik.
+   **When:** uporabnik osveži stran.
+   **Then:** ob receptu je še vedno prikazano število 5, gumb pa prikazuje »Odstrani všeček«.
+
+**Podrobnosti implementacije:**
+- V entiteto `Recepti` se doda polje `vseckov` tipa `Integer` (privzeto 0). Uporabi se `Integer`, ne `int`, ker bi Hibernate pri `int` dodal stolpec `NOT NULL`, kar pri obstoječih vrsticah v bazi ne uspe. Vrednost `null` se obravnava kot 0.
+- Nova end pointa z opisom `@Operation`: `POST /api/recepti/{id}/vseck` poveča število za 1, `DELETE /api/recepti/{id}/vseck` ga zmanjša za 1 (nikoli pod 0). Oba vrneta 200 s posodobljenim receptom ali 404, če recept ne obstaja.
+- Metoda `PUT /api/recepti/{id}` števila všečkov ne spreminja.
+- Prijave v aplikaciji še ni, zato se v tej iteraciji všečkanje ne omejuje na registrirane uporabnike. Ali je uporabnik recept že všečkal, si obličje zapomni v `localStorage` (seznam ID-jev všečkanih receptov).
+- Obličje (`App.jsx`): ob vsakem receptu gumb »Všečkaj« / »Odstrani všeček« in prikaz števila, klic z Axiosom, ob napaki sporočilo.
+
+**Naloge (sub-issues):**
+- **US-03-T1 — Backend: polje `vseckov` in end pointa za všečkanje.** Dodati polje v `Recepti` ter `POST` in `DELETE` `/api/recepti/{id}/vseck`. **Odgovoren:** Luka Orešnik.
+- **US-03-T2 — Frontend: gumb za všečkanje in prikaz števila všečkov.** Dodati gumb in število ob receptu, shranjevanje stanja v `localStorage` in sporočilo ob napaki. **Odgovoren:** Luka Orešnik.
 
 ## Definition of Ready
 
