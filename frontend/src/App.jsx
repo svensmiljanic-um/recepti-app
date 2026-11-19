@@ -4,6 +4,7 @@ import './App.css';
 
 const API_URL = 'http://localhost:8080/api/recepti';
 const VELIKOST_STRANI = 3; // število receptov na eni strani
+const NOVA = '__nova__'; // vrednost izbire "Nova kategorija..." v spustnem meniju
 
 function App() {
     const [recipes, setRecipes] = useState([]); // recepti na trenutni strani
@@ -14,18 +15,40 @@ function App() {
     const [skupajStrani, setSkupajStrani] = useState(0); // koliko strani je skupaj
     const [skupajRecepti, setSkupajRecepti] = useState(0); // koliko receptov je skupaj
 
+    const [kategorije, setKategorije] = useState([]); // seznam kategorij iz backenda
+    const [novaKategorija, setNovaKategorija] = useState(''); // besedilo, ko uporabnik izbere "Nova kategorija..."
+    const [napakaKategorije, setNapakaKategorije] = useState(false); // true, če kategorij ni bilo mogoče naložiti
+
     const [formData, setFormData] = useState({ //vrednosti polj v obrazcu
         ime: '',
         opis: '',
         sestavine: '',
         navodila: '',
-        cas_priprave: ''
+        cas_priprave: '',
+        kategorija: ''
     });
 
     // recepte ponovno preberemo, ko se spremeni stran ali iskanje
     useEffect(() => {
         fetchRecipes();
     }, [stran, iskanje]);
+
+    // kategorije preberemo samo enkrat, ob zagonu strani
+    useEffect(() => {
+        axios.get(`${API_URL}/kategorije`)
+            .then((response) => setKategorije(response.data))
+            .catch(() => setNapakaKategorije(true));
+    }, []);
+
+    // ponovno prebere kategorije (po shranjevanju, da se nova kategorija pojavi med predlogi)
+    const osveziKategorije = async () => {
+        try {
+            const response = await axios.get(`${API_URL}/kategorije`);
+            setKategorije(response.data);
+        } catch (error) {
+            console.error('Napaka pri pridobivanju kategorij:', error);
+        }
+    };
 
     // GET zahteva na backend (iskanje + paginacija)
     const fetchRecipes = async () => {
@@ -56,7 +79,9 @@ function App() {
         e.preventDefault();
         try {
             // cas priprave pretvorimo v stevilo, ker backend pričakuje int
-            const podatki = { ...formData, cas_priprave: Number(formData.cas_priprave) || 0 };
+            // če je izbrana "Nova kategorija...", pošljemo vpisano besedilo
+            const izbrana = formData.kategorija === NOVA ? novaKategorija : formData.kategorija;
+            const podatki = { ...formData, kategorija: izbrana, cas_priprave: Number(formData.cas_priprave) || 0 };
 
             if (editingId) {
                 await axios.put(`${API_URL}/${editingId}`, podatki);
@@ -64,7 +89,9 @@ function App() {
             } else {
                 await axios.post(API_URL, podatki);
             }
-            setFormData({ ime: '', opis: '', sestavine: '', navodila: '', cas_priprave: '' });
+            setFormData({ ime: '', opis: '', sestavine: '', navodila: '', cas_priprave: '', kategorija: '' });
+            setNovaKategorija('');
+            osveziKategorije();
 
             if (!editingId && (stran !== 0 || iskanje !== '')) {
                 setIskanje('');
@@ -81,12 +108,15 @@ function App() {
     // napolni obrazec s podatki izbranega recepta
     const handleEdit = (recipe) => {
         setEditingId(recipe.id);
+        setNovaKategorija('');
         setFormData({
             ime: recipe.ime || '',
             opis: recipe.opis || '',
             sestavine: recipe.sestavine || '',
             navodila: recipe.navodila || '',
-            cas_priprave: recipe.cas_priprave || ''
+            cas_priprave: recipe.cas_priprave || '',
+            // "Brez kategorije" v obrazcu pomeni, da kategorija ni izbrana
+            kategorija: recipe.kategorija === 'Brez kategorije' ? '' : (recipe.kategorija || '')
         });
     };
 
@@ -108,7 +138,8 @@ function App() {
 
     const handleCancelEdit = () => {
         setEditingId(null);
-        setFormData({ ime: '', opis: '', sestavine: '', navodila: '', cas_priprave: '' });
+        setNovaKategorija('');
+        setFormData({ ime: '', opis: '', sestavine: '', navodila: '', cas_priprave: '', kategorija: '' });
     };
 
     return (
@@ -179,6 +210,38 @@ function App() {
                         />
                     </div>
 
+                    <div className="input-group">
+                        <label>Kategorija</label>
+                        <select
+                            name="kategorija"
+                            value={formData.kategorija}
+                            onChange={handleChange}
+                            className="form-input narrow-input"
+                        >
+                            <option value="">Brez kategorije</option>
+                            {kategorije.map((k) => (
+                                <option key={k} value={k}>{k}</option>
+                            ))}
+                            <option value={NOVA}>Nova kategorija...</option>
+                        </select>
+                        {/* polje za vpis se prikaže samo, če je izbrana nova kategorija */}
+                        {formData.kategorija === NOVA && (
+                            <input
+                                type="text"
+                                value={novaKategorija}
+                                onChange={(e) => setNovaKategorija(e.target.value)}
+                                placeholder="Vpiši novo kategorijo"
+                                maxLength={50}
+                                className="form-input narrow-input"
+                            />
+                        )}
+                        {napakaKategorije && (
+                            <span className="warning-text">
+                                Kategorij ni mogoče naložiti. Izbereš lahko »Nova kategorija...«, sicer bo recept shranjen brez kategorije.
+                            </span>
+                        )}
+                    </div>
+
                     <div className="button-container">
                         <button type="submit" className="btn-primary">
                             {editingId ? 'Shrani spremembe' : 'Dodaj recept'}
@@ -214,9 +277,12 @@ function App() {
                         <div key={recipe.id} className="recipe-card">
                             <div className="card-header">
                                 <h3 className="recipe-title">{recipe.ime}</h3>
-                                {recipe.cas_priprave > 0 && (
-                                    <span className="recipe-badge">{recipe.cas_priprave} min</span>
-                                )}
+                                <div className="card-badges">
+                                    <span className="recipe-badge">{recipe.kategorija || 'Brez kategorije'}</span>
+                                    {recipe.cas_priprave > 0 && (
+                                        <span className="recipe-badge">{recipe.cas_priprave} min</span>
+                                    )}
+                                </div>
                             </div>
 
                             {recipe.opis && <p className="recipe-opis">{recipe.opis}</p>}

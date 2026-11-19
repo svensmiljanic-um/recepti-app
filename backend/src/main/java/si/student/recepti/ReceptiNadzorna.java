@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Tag(name = "Recepti")
@@ -17,6 +18,11 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/api/recepti")
 public class ReceptiNadzorna {
+    // začetne kategorije; uporabnik lahko vpiše tudi svojo
+    private static final List<String> KATEGORIJE = List.of("Predjed", "Glavna jed", "Priloga", "Juha", "Sladica", "Pijača");
+    // kategorija, ki jo dobi recept, če uporabnik ne izbere nobene
+    private static final String BREZ_KATEGORIJE = "Brez kategorije";
+
     private final ReceptiRepository shrambaReceptov;
 
     public ReceptiNadzorna(ReceptiRepository shrambaReceptov) {
@@ -28,6 +34,32 @@ public class ReceptiNadzorna {
     @GetMapping
     public List<Recepti> pridobiVseRecepte() {
         return shrambaReceptov.findAll(); // findAll() prebere vse vrstice iz tabele, Spring vrne JSON
+    }
+
+    // vrne začetne kategorije in kategorije, ki jih je uporabnik že vpisal pri receptih
+    @Operation(summary = "Vrne seznam kategorij receptov")
+    @GetMapping("/kategorije")
+    public List<String> pridobiKategorije() {
+        List<String> vse = new ArrayList<>(KATEGORIJE);
+        for (String k : shrambaReceptov.najdiKategorije()) {
+            // "Brez kategorije" ni prava kategorija, zato je ne ponujamo
+            if (!vse.contains(k) && !k.equals(BREZ_KATEGORIJE)) {
+                vse.add(k);
+            }
+        }
+        return vse;
+    }
+
+    // počisti vpisano kategorijo; če je prazna, vrne "Brez kategorije"
+    private String preveriKategorijo(String kategorija) {
+        if (kategorija == null || kategorija.trim().isEmpty()) {
+            return BREZ_KATEGORIJE;
+        }
+        String ociscena = kategorija.trim();
+        if (ociscena.length() > 50) {
+            ociscena = ociscena.substring(0, 50); // kategorija je lahko dolga največ 50 znakov
+        }
+        return ociscena;
     }
 
     // iskanje in paginacija: vrne samo eno stran receptov
@@ -65,6 +97,7 @@ public class ReceptiNadzorna {
     @Operation(summary = "Doda nov recept")
     @PostMapping
     public Recepti dodajRecept(@RequestBody Recepti recept) {
+        recept.setKategorija(preveriKategorijo(recept.getKategorija())); // privzeta kategorija, če je ni
         return shrambaReceptov.save(recept); // save() vstavi novo vrstico, ID dodeli baza
     }
 
@@ -83,6 +116,7 @@ public class ReceptiNadzorna {
         recept.setSestavine(noviPodatki.getSestavine());
         recept.setNavodila(noviPodatki.getNavodila());
         recept.setCas_priprave(noviPodatki.getCas_priprave());
+        recept.setKategorija(preveriKategorijo(noviPodatki.getKategorija()));
 
         Recepti shranjenRecept = shrambaReceptov.save(recept);
 

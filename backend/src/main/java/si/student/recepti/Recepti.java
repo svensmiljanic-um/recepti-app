@@ -24,6 +24,9 @@ public class Recepti {
 
     private int cas_priprave;
 
+    // kategorija recepta (npr. Juha, Sladica); če je uporabnik ne izbere, se shrani "Brez kategorije"
+    private String kategorija;
+
     public Recepti() {
     }
 
@@ -51,6 +54,10 @@ public class Recepti {
         return cas_priprave;
     }
 
+    public String getKategorija() {
+        return kategorija;
+    }
+
     public void setIme(String ime) {
         this.ime = ime;
     }
@@ -69,5 +76,9 @@ public class Recepti {
 
     public void setCas_priprave(int cas_priprave) {
         this.cas_priprave = cas_priprave;
+    }
+
+    public void setKategorija(String kategorija) {
+        this.kategorija = kategorija;
     }
 }

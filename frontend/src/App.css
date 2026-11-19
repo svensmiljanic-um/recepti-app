@@ -162,6 +162,11 @@ body {
   font-size: 12px;
 }
 
+.card-badges {
+  display: flex;
+  gap: 8px;
+}
+
 .recipe-opis {
   margin: 0 0 12px 0;
   color: #666666;
@@ -211,6 +216,11 @@ body {
   border-radius: 4px;
   font-size: 13px;
   cursor: pointer;
+}
+
+.warning-text {
+  color: #b45309;
+  font-size: 13px;
 }
 
 .empty-state {
