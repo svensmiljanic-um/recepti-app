@@ -97,6 +97,16 @@ body {
   margin-bottom: 16px;
 }
 
+.category-filter {
+  margin-bottom: 16px;
+}
+
+.category-filter select:disabled {
+  background-color: #eeeeee;
+  color: #777777;
+  cursor: not-allowed;
+}
+
 /* Gumbi */
 .button-container {
   display: flex;

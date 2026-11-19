@@ -79,6 +79,7 @@ Aplikacija uporabniku omogoča, da na enem mestu hrani svoje recepte. Zaledje (b
 **Funkcionalnosti**
 - dodajanje, pregledovanje (vseh in enega recepta), posodabljanje in brisanje receptov (CRUD),
 - iskanje receptov po imenu ali sestavinah (ne razlikuje velikih in malih črk),
+- filtriranje receptov po kategoriji, tudi skupaj z iskanjem,
 - paginacija seznama (obličje zahteva 3 recepte na stran, najnovejši so zgoraj).
 
 ### Podatkovni model
@@ -92,6 +93,7 @@ Tabela `recepti` (ustvari se samodejno ob prvem zagonu zaledja):
 | `sestavine`    | `varchar(2000)`        | seznam sestavin s količinami          |
 | `navodila`     | `varchar(5000)`        | postopek priprave                     |
 | `cas_priprave` | `integer`              | čas priprave v minutah                |
+| `kategorija`   | `varchar(255)`         | kategorija recepta                    |
 
 
 
@@ -101,7 +103,8 @@ Osnovni naslov: `http://localhost:8080/api/recepti`
 | Metoda   | Pot                     | Opis                                                                                         | Odgovor                |
 |----------|-------------------------|----------------------------------------------------------------------------------------------|------------------------|
 | `GET`    | `/api/recepti`          | vrne vse recepte                                                                             | 200                    |
-| `GET`    | `/api/recepti/stran`    | vrne eno stran receptov, z iskanjem (`iskanje`, `stran`, `velikost`; privzeta velikost je 3) | 200 |
+| `GET`    | `/api/recepti/stran`    | vrne eno stran receptov, z iskanjem (`iskanje`), filtrom kategorije (`kategorija`) in paginacijo (`stran`, `velikost`; privzeta velikost je 3) | 200 |
+| `GET`    | `/api/recepti/kategorije` | vrne razpoložljive kategorije receptov                                                    | 200 |
 | `GET`    | `/api/recepti/{id}`     | vrne en recept                                                                               | 200 / 404              |
 | `POST`   | `/api/recepti`          | doda nov recept                                                                              | 200                    |
 | `PUT`    | `/api/recepti/{id}`     | posodobi obstoječi recept                                                                    | 200 / 404              |

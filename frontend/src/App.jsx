@@ -11,6 +11,7 @@ function App() {
     const [editingId, setEditingId] = useState(null); // id, ki ga urejamo
 
     const [iskanje, setIskanje] = useState(''); // besedilo v iskalnem polju
+    const [filterKategorija, setFilterKategorija] = useState(''); // izbrana kategorija za filtriranje
     const [stran, setStran] = useState(0); // trenutna stran (prva je 0)
     const [skupajStrani, setSkupajStrani] = useState(0); // koliko strani je skupaj
     const [skupajRecepti, setSkupajRecepti] = useState(0); // koliko receptov je skupaj
@@ -28,10 +29,10 @@ function App() {
         kategorija: ''
     });
 
-    // recepte ponovno preberemo, ko se spremeni stran ali iskanje
+    // recepte ponovno preberemo, ko se spremeni stran, iskanje ali kategorija
     useEffect(() => {
         fetchRecipes();
-    }, [stran, iskanje]);
+    }, [stran, iskanje, filterKategorija]);
 
     // kategorije preberemo samo enkrat, ob zagonu strani
     useEffect(() => {
@@ -50,11 +51,16 @@ function App() {
         }
     };
 
-    // GET zahteva na backend (iskanje + paginacija)
+    // GET zahteva na backend (iskanje, kategorija + paginacija)
     const fetchRecipes = async () => {
         try {
             const response = await axios.get(`${API_URL}/stran`, {
-                params: { iskanje: iskanje, stran: stran, velikost: VELIKOST_STRANI }
+                params: {
+                    iskanje: iskanje,
+                    kategorija: filterKategorija,
+                    stran: stran,
+                    velikost: VELIKOST_STRANI
+                }
             });
             setRecipes(response.data.content); // recepti na tej strani
             setSkupajStrani(response.data.totalPages);
@@ -72,6 +78,12 @@ function App() {
     // ob vpisu v iskalno polje gremo nazaj na prvo stran
     const handleSearch = (e) => {
         setIskanje(e.target.value);
+        setStran(0);
+    };
+
+    // ob spremembi kategorije se vrnemo na prvo stran rezultatov
+    const handleCategoryFilter = (e) => {
+        setFilterKategorija(e.target.value);
         setStran(0);
     };
 
@@ -267,9 +279,36 @@ function App() {
                 className="form-input search-input"
             />
 
+            <div className="input-group category-filter">
+                <label htmlFor="filter-kategorija">Filtriraj po kategoriji</label>
+                <select
+                    id="filter-kategorija"
+                    value={filterKategorija}
+                    onChange={handleCategoryFilter}
+                    disabled={napakaKategorije}
+                    className="form-input narrow-input"
+                >
+                    <option value="">Vse kategorije</option>
+                    {kategorije.map((k) => (
+                        <option key={k} value={k}>{k}</option>
+                    ))}
+                </select>
+            </div>
+            {napakaKategorije && (
+                <p className="warning-text" role="alert">
+                    Seznama kategorij ni mogoče naložiti. Filtriranje po kategoriji ni na voljo; recepte lahko še vedno pregleduješ in iščeš brez filtra.
+                </p>
+            )}
+
             {recipes.length === 0 ? (
                 <p className="empty-state">
-                    {iskanje ? 'Ni receptov, ki bi ustrezali iskanju.' : 'Trenutno ni vnesenih receptov. Dodajte prvega zgoraj!'}
+                    {filterKategorija
+                        ? iskanje
+                            ? 'V tej kategoriji ni receptov, ki bi ustrezali iskanju.'
+                            : 'V tej kategoriji še ni receptov.'
+                        : iskanje
+                            ? 'Ni receptov, ki bi ustrezali iskanju.'
+                            : 'Trenutno ni vnesenih receptov. Dodajte prvega zgoraj!'}
                 </p>
             ) : (
                 <div className="recipe-list">

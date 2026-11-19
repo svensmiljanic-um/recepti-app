@@ -64,18 +64,24 @@ public class ReceptiNadzorna {
 
     // iskanje in paginacija: vrne samo eno stran receptov
     // iskanje = besedilo, ki ga iščemo v imenu ali sestavinah (prazno = vsi recepti)
+    // kategorija = neobvezen filter; prazna vrednost pomeni vse kategorije
     // stran = številka strani (prva stran je 0), velikost = število receptov na strani
-    @Operation(summary = "Vrne recepte po straneh, z iskanjem po imenu in sestavinah")
+    @Operation(summary = "Vrne recepte po straneh, z iskanjem in neobveznim filtrom kategorije")
     @GetMapping("/stran")
     public Page<Recepti> pridobiStran(
             @RequestParam(defaultValue = "") String iskanje,
+            @RequestParam(defaultValue = "") String kategorija,
             @RequestParam(defaultValue = "0") int stran,
             @RequestParam(defaultValue = "5") int velikost) {
 
         // najnovejši recepti (z največjim ID-jem) so na vrhu
         Pageable strani = PageRequest.of(stran, velikost, Sort.by("id").descending());
 
-        // isti niz iščemo v imenu in v sestavinah
+        if (kategorija != null && !kategorija.isBlank()) {
+            return shrambaReceptov.najdiPoKategorijiInIskanju(kategorija.trim(), iskanje, strani);
+        }
+
+        // brez filtra kategorije ohranimo obstoječe iskanje po imenu in sestavinah
         return shrambaReceptov.findByImeContainingIgnoreCaseOrSestavineContainingIgnoreCase(iskanje, iskanje, strani);
     }
 
