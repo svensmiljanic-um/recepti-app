@@ -67,6 +67,137 @@ Aplikacija je spletna in namenjena objavi besedilnih receptov. Slik, videoposnet
 - [Uporabniške zgodbe in sprejemni kriteriji](docs/user-stories.md)
 ---
 
+
+## Razredni diagram
+
+Diagram prikazuje ciljno zasnovo aplikacije glede na funkcionalnosti v DPU, uporabniških zgodbah in primerih uporabe. Vključuje tudi načrtovane vloge in komentarje, ki v trenutni implementaciji še niso na voljo. Kategorija je prikazana kot enum, ker je v projektu določen fiksen seznam kategorij.
+
+```mermaid
+classDiagram
+    direction TB
+
+    class Recepti {
+        +Long id
+        +String ime
+        +String opis
+        +String sestavine
+        +String navodila
+        +int cas_priprave
+        +String kategorija
+        +Integer vseckov
+        +getVseckov() int
+        +setVseckov(vrednost) void
+    }
+
+    class Kategorija {
+        <<enumeration>>
+        PREDJED
+        GLAVNA_JED
+        PRILOGA
+        JUHA
+        SLADICA
+        PICA
+        BREZ_KATEGORIJE
+    }
+
+    class Komentar {
+        <<načrtovano po DPU>>
+        +Long id
+        +String besedilo
+        +DateTime casObjave
+        +dodaj(besedilo) Komentar
+        +izbrisi() void
+    }
+
+    class Uporabnik {
+        <<načrtovano po DPU>>
+        +Long id
+        +String uporabniskoIme
+        +String email
+        +prijava(email, geslo) boolean
+        +odjava() void
+    }
+
+    class Gost {
+        +preglejRecepte() void
+        +isciRecepte(iskanje, kategorija, stran) void
+    }
+
+    class RegistriranUporabnik {
+        +objaviRecept(recept) Recepti
+        +urediSvojRecept(id, podatki) Recepti
+        +izbrisiSvojRecept(id) void
+        +dodajKomentar(id, besedilo) Komentar
+        +vseckaj(id) void
+        +odstraniVsecek(id) void
+    }
+
+    class Administrator {
+        +izbrisiRecept(id) void
+        +izbrisiKomentar(id) void
+    }
+
+    class ReceptiNadzorna {
+        +pridobiVseRecepte() List
+        +pridobiKategorije() List
+        +pridobiStran(iskanje, kategorija, stran, velikost) Page
+        +pridobiRecept(id) Recepti
+        +dodajRecept(recept) Recepti
+        +posodobiRecept(id, recept) Recepti
+        +dodajVseck(id) Recepti
+        +odstraniVseck(id) Recepti
+        +izbrisiRecept(id) void
+    }
+
+    class ReceptiRepository {
+        +findAll() List
+        +findById(id) Optional
+        +save(recept) Recepti
+        +deleteById(id) void
+        +najdiPoImenuAliSestavinah(iskanje, stran) Page
+        +najdiPoKategorijiInIskanju(kategorija, iskanje, stran) Page
+    }
+
+    class App {
+        +fetchRecipes() void
+        +osveziKategorije() void
+        +handleSubmit() void
+        +handleEdit(recept) void
+        +handleDelete(id) void
+        +handleLike(recept) void
+        +shraniVseckaneVLocalStorage() void
+    }
+
+    Uporabnik <|-- Gost
+    Uporabnik <|-- RegistriranUporabnik
+    RegistriranUporabnik <|-- Administrator
+
+    Recepti --> Kategorija : ima eno
+    Recepti "1" *-- "0..*" Komentar : vsebuje
+    RegistriranUporabnik "1" --> "0..*" Recepti : objavi
+    RegistriranUporabnik "1" --> "0..*" Komentar : napiše
+
+    ReceptiNadzorna ..> ReceptiRepository : uporablja
+    ReceptiNadzorna ..> Recepti : upravlja
+    App ..> ReceptiNadzorna : kliče REST API
+    App ..> Recepti : prikaže in ureja
+    App ..> Kategorija : filtrira
+```
+
+**Vloga in namen razredov**
+
+- `Recepti` je osrednji podatkovni razred. Hrani vsebino recepta, kategorijo in število všečkov.
+- `Kategorija` določa fiksne kategorije za razvrščanje in filtriranje receptov.
+- `ReceptiNadzorna` sprejema REST zahteve za branje, iskanje, filtriranje, paginacijo, CRUD in spreminjanje števila všečkov.
+- `ReceptiRepository` bere in shranjuje recepte v podatkovno bazo ter izvaja poizvedbe za iskanje in filtriranje.
+- `App` je Reactov uporabniški vmesnik. Pridobi recepte in kategorije, pošilja spremembe zaledju ter shrani seznam všečkanih ID-jev v `localStorage`.
+- `Uporabnik`, `Gost`, `RegistriranUporabnik`, `Administrator` in `Komentar` prikazujejo načrtovano zasnovo iz DPU. Prijava, uporabniške vloge in komentiranje v trenutni različici še niso implementirani.
+
+**Ključne metode**
+
+`pridobiStran` uporabi iskalni niz, kategorijo in podatke o strani ter vrne ustrezne recepte. `dodajRecept`, `posodobiRecept` in `izbrisiRecept` izvajajo osnovne spremembe receptov. `dodajVseck` in `odstraniVseck` posodobita števec všečkov; `handleLike` pokliče ustrezno metodo glede na stanje všečka in shrani uporabnikovo izbiro v brskalniku. Metodi `najdiPoImenuAliSestavinah` in `najdiPoKategorijiInIskanju` izvajata iskanje v repozitoriju.
+
+---
 ## 1. O projektu
 
 Aplikacija uporabniku omogoča, da na enem mestu hrani svoje recepte. Zaledje (backend) in obličje (frontend) sta ločena projekta v ločenih mapah, ki komunicirata prek REST API-ja.
