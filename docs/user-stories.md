@@ -1,5 +1,7 @@
 # Uporabniške zgodbe
 
+Izbrani funkcionalnosti sta kategorije receptov (US-01 in US-02) ter všečkanje receptov (US-03). Zgodbe izhajajo iz primerov uporabe v [PrimeriUporabe.md](PrimeriUporabe.md). Uporabniških računov še ni, zato se zgodbe v tej iteraciji nanašajo na vlogo »uporabnik«.
+
 | ID    | Zgodba                        | Odgovorni član   |
 |-------|-------------------------------|------------------|
 | US-01 | Določitev kategorije recepta  | Sven Smiljanić   |
@@ -26,12 +28,14 @@
 4. **Given:** seznama kategorij ni mogoče naložiti.
    **When:** odprem obrazec za nov recept.
    **Then:** prikaže se opozorilo, da kategorij ni mogoče izbrati, recept pa je še vedno mogoče shraniti s kategorijo »Brez kategorije«.
-   **Podrobnosti implementacije:**
+
+**Podrobnosti implementacije:**
 - V entiteto `Recepti` se doda polje `kategorija` (`String`, stolpec `kategorija`). Ker je v projektu `ddl-auto=update`, Hibernate stolpec doda sam. Obstoječi recepti imajo vrednost `null`, ki se prikaže kot »Brez kategorije«.
-- Kategorije so fiksen seznam v kodi: Predjed, Glavna jed, Priloga, Juha, Sladica, Pijača. Vsak recept ima eno kategorijo (izbira več kategorij iz primera uporabe v tej iteraciji ni vključena).
+- Kategorije so fiksen seznam v kodi: Predjed, Glavna jed, Priloga, Juha, Sladica, Pijača. Vsak recept ima eno kategorijo (izbira več kategorij iz primera uporabe v tej iteraciji ni vključena). Uporabnik novih kategorij ne more dodajati. Če kategorija ni izbrana, backend nastavi »Brez kategorije«.
 - Nov end point `GET /api/recepti/kategorije` vrne seznam kategorij, opis za Swagger z `@Operation`.
 - Obličje (`App.jsx`): v obrazcu spustni seznam kategorij (`<select>`), nalaganje seznama ob zagonu z Axiosom, ob napaki opozorilo; ob receptu v seznamu prikaz kategorije.
-  **Naloge (sub-issues):**
+
+**Naloge (sub-issues):**
 - **US-01-T1:** Zaledje: polje `kategorija` v `Recepti` in end point za seznam kategorij. *Odgovoren: Sven Smiljanić.*
 - **US-01-T2:** Obličje: spustni seznam kategorij v obrazcu in prikaz kategorije ob receptu. *Odgovoren: Sven Smiljanić.*
 
@@ -61,6 +65,7 @@
 
 **Podrobnosti implementacije:**
 - Zgodba je odvisna od US-01, ki doda kategorijo receptu in omogoči pridobitev seznama kategorij.
+- Ker so kategorije fiksne (US-01), se filtrira po natančnem ujemanju kategorije. Obličje pošlje izbrano kategorijo kot parameter `kategorija` na `GET /api/recepti/stran`, prazna vrednost pomeni »Vse kategorije«.
 - Za posamezen recept se uporablja ena kategorija. Uporabnik lahko izbere eno kategorijo ali »Vse kategorije«.
 - Backend razširi obstoječe paginirano iskanje tako, da izbrani kategoriji in iskalnemu nizu ustrezajo isti rezultati. Brez izbrane kategorije se obnašanje iskanja ne spremeni.
 - Frontend doda izbiro kategorije in jo poveže z obstoječim iskalnim poljem. Ob spremembi kategorije se seznam začne na prvi strani; ohranjena je paginacija treh receptov na stran in razvrščanje od najnovejšega do najstarejšega.
@@ -109,9 +114,9 @@
 
 - Uporabniške zgodbe so jasno definirane.
 - Sprejemni kriteriji so merljivi (podane so konkretne vrednosti in sporočila).
-- Ekipa razume namen: razvrstitev receptov v kategorije in lažje iskanje.
+- Ekipa razume namen: razvrstitev receptov v kategorije, lažje iskanje in izražanje priljubljenosti receptov.
 - Podrobnosti implementacije so zapisane.
-- 
+
 ## Preverjanje po implementaciji
 
 Po implementaciji se vsak sprejemni kriterij preveri ročno v aplikaciji (in po potrebi v Swaggerju). Rezultat se zapiše v ustrezen GitHub Issue ob zaprtju zgodbe.

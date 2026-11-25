@@ -4,7 +4,15 @@ import './App.css';
 
 const API_URL = 'http://localhost:8080/api/recepti';
 const VELIKOST_STRANI = 3; // število receptov na eni strani
-const NOVA = '__nova__'; // vrednost izbire "Nova kategorija..." v spustnem meniju
+
+// besedilo sestavin razdeli na posamezne sestavine: po novih vrsticah, podpičjih in vejicah
+// vejica med dvema številkama (npr. 1,5 dl) ostane, ker je decimalna vejica
+function razdeliSestavine(besedilo) {
+    return besedilo
+        .split(/\n|;|(?<!\d),|,(?!\d)/)
+        .map((sestavina) => sestavina.trim())
+        .filter((sestavina) => sestavina !== '');
+}
 
 function App() {
     const [recipes, setRecipes] = useState([]); // recepti na trenutni strani
@@ -16,8 +24,7 @@ function App() {
     const [skupajStrani, setSkupajStrani] = useState(0); // koliko strani je skupaj
     const [skupajRecepti, setSkupajRecepti] = useState(0); // koliko receptov je skupaj
 
-    const [kategorije, setKategorije] = useState([]); // seznam kategorij iz backenda
-    const [novaKategorija, setNovaKategorija] = useState(''); // besedilo, ko uporabnik izbere "Nova kategorija..."
+    const [kategorije, setKategorije] = useState([]); // seznam kategorij iz backenda (fiksen)
     const [napakaKategorije, setNapakaKategorije] = useState(false); // true, če kategorij ni bilo mogoče naložiti
 
     const [vseckani, setVseckani] = useState(() => {
@@ -28,6 +35,7 @@ function App() {
         }
     });
     const [napakaVseck, setNapakaVseck] = useState(false);
+    const [odprtId, setOdprtId] = useState(null); // id recepta, ki je odprt v oknu (null = okno je zaprto)
 
     const [formData, setFormData] = useState({ //vrednosti polj v obrazcu
         ime: '',
@@ -47,22 +55,23 @@ function App() {
         localStorage.setItem('vseckani', JSON.stringify(vseckani));
     }, [vseckani]);
 
+    // okno z receptom zapremo s tipko Escape
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            if (e.key === 'Escape') {
+                setOdprtId(null);
+            }
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, []);
+
     // kategorije preberemo samo enkrat, ob zagonu strani
     useEffect(() => {
         axios.get(`${API_URL}/kategorije`)
             .then((response) => setKategorije(response.data))
             .catch(() => setNapakaKategorije(true));
     }, []);
-
-    // ponovno prebere kategorije (po shranjevanju, da se nova kategorija pojavi med predlogi)
-    const osveziKategorije = async () => {
-        try {
-            const response = await axios.get(`${API_URL}/kategorije`);
-            setKategorije(response.data);
-        } catch (error) {
-            console.error('Napaka pri pridobivanju kategorij:', error);
-        }
-    };
 
     // GET zahteva na backend (iskanje, kategorija + paginacija)
     const fetchRecipes = async () => {
@@ -104,9 +113,7 @@ function App() {
         e.preventDefault();
         try {
             // cas priprave pretvorimo v stevilo, ker backend pričakuje int
-            // če je izbrana "Nova kategorija...", pošljemo vpisano besedilo
-            const izbrana = formData.kategorija === NOVA ? novaKategorija : formData.kategorija;
-            const podatki = { ...formData, kategorija: izbrana, cas_priprave: Number(formData.cas_priprave) || 0 };
+            const podatki = { ...formData, cas_priprave: Number(formData.cas_priprave) || 0 };
 
             if (editingId) {
                 await axios.put(`${API_URL}/${editingId}`, podatki);
@@ -115,11 +122,11 @@ function App() {
                 await axios.post(API_URL, podatki);
             }
             setFormData({ ime: '', opis: '', sestavine: '', navodila: '', cas_priprave: '', kategorija: '' });
-            setNovaKategorija('');
-            osveziKategorije();
 
-            if (!editingId && (stran !== 0 || iskanje !== '')) {
+            // nov recept se mora videti, zato pri dodajanju počistimo iskanje, filter in stran
+            if (!editingId && (stran !== 0 || iskanje !== '' || filterKategorija !== '')) {
                 setIskanje('');
+                setFilterKategorija('');
                 setStran(0);
             } else {
                 fetchRecipes();
@@ -133,7 +140,6 @@ function App() {
     // napolni obrazec s podatki izbranega recepta
     const handleEdit = (recipe) => {
         setEditingId(recipe.id);
-        setNovaKategorija('');
         setFormData({
             ime: recipe.ime || '',
             opis: recipe.opis || '',
@@ -177,9 +183,11 @@ function App() {
 
     const handleCancelEdit = () => {
         setEditingId(null);
-        setNovaKategorija('');
         setFormData({ ime: '', opis: '', sestavine: '', navodila: '', cas_priprave: '', kategorija: '' });
     };
+
+    // recept, ki je odprt v oknu
+    const odprtRecept = recipes.find((r) => r.id === odprtId);
 
     return (
         <div className="app-container">
@@ -222,6 +230,7 @@ function App() {
                                 name="sestavine"
                                 value={formData.sestavine}
                                 onChange={handleChange}
+                                placeholder="Vsako sestavino loči z vejico ali jo napiši v novo vrstico"
                                 maxLength={2000}
                                 className="form-textarea medium-textarea"
                             />
@@ -261,22 +270,10 @@ function App() {
                             {kategorije.map((k) => (
                                 <option key={k} value={k}>{k}</option>
                             ))}
-                            <option value={NOVA}>Nova kategorija...</option>
                         </select>
-                        {/* polje za vpis se prikaže samo, če je izbrana nova kategorija */}
-                        {formData.kategorija === NOVA && (
-                            <input
-                                type="text"
-                                value={novaKategorija}
-                                onChange={(e) => setNovaKategorija(e.target.value)}
-                                placeholder="Vpiši novo kategorijo"
-                                maxLength={50}
-                                className="form-input narrow-input"
-                            />
-                        )}
                         {napakaKategorije && (
                             <span className="warning-text">
-                                Kategorij ni mogoče naložiti. Izbereš lahko »Nova kategorija...«, sicer bo recept shranjen brez kategorije.
+                                Kategorij ni mogoče naložiti. Recept bo shranjen brez kategorije.
                             </span>
                         )}
                     </div>
@@ -347,31 +344,21 @@ function App() {
                 <div className="recipe-list">
                     {recipes.map((recipe) => (
                         <div key={recipe.id} className="recipe-card">
-                            <div className="card-header">
-                                <h3 className="recipe-title">{recipe.ime}</h3>
-                                <div className="card-badges">
-                                    <span className="recipe-badge">{recipe.kategorija || 'Brez kategorije'}</span>
-                                    {recipe.cas_priprave > 0 && (
-                                        <span className="recipe-badge">{recipe.cas_priprave} min</span>
-                                    )}
+                            {/* klik na ta del kartice odpre okno s celotnim receptom */}
+                            <div className="card-click" onClick={() => setOdprtId(recipe.id)}>
+                                <div className="card-header">
+                                    <h3 className="recipe-title">{recipe.ime}</h3>
+                                    <div className="card-badges">
+                                        <span className="recipe-badge">{recipe.kategorija || 'Brez kategorije'}</span>
+                                        {recipe.cas_priprave > 0 && (
+                                            <span className="recipe-badge">{recipe.cas_priprave} min</span>
+                                        )}
+                                    </div>
                                 </div>
-                            </div>
 
-                            {recipe.opis && <p className="recipe-opis">{recipe.opis}</p>}
+                                {recipe.opis && <p className="recipe-opis">{recipe.opis}</p>}
 
-                            <div className="recipe-details">
-                                {recipe.sestavine && (
-                                    <div className="detail-block">
-                                        <strong>Sestavine:</strong>
-                                        <p className="detail-text">{recipe.sestavine}</p>
-                                    </div>
-                                )}
-                                {recipe.navodila && (
-                                    <div className="detail-block">
-                                        <strong>Navodila:</strong>
-                                        <p className="detail-text">{recipe.navodila}</p>
-                                    </div>
-                                )}
+                                <p className="card-hint">Odpri recept</p>
                             </div>
 
                             <div className="card-actions">
@@ -412,6 +399,47 @@ function App() {
                     >
                         Naslednja
                     </button>
+                </div>
+            )}
+
+            {/* Okno s celotnim receptom */}
+            {odprtRecept && (
+                <div className="modal-overlay" onClick={() => setOdprtId(null)}>
+                    <div className="modal" onClick={(e) => e.stopPropagation()}>
+                        <button onClick={() => setOdprtId(null)} className="modal-close">
+                            Zapri
+                        </button>
+
+                        <h2 className="modal-title">{odprtRecept.ime}</h2>
+                        <div className="card-badges modal-badges">
+                            <span className="recipe-badge">{odprtRecept.kategorija || 'Brez kategorije'}</span>
+                            {odprtRecept.cas_priprave > 0 && (
+                                <span className="recipe-badge">{odprtRecept.cas_priprave} min</span>
+                            )}
+                            <span className="recipe-badge">Všečkov: {odprtRecept.vseckov || 0}</span>
+                        </div>
+
+                        {odprtRecept.opis && <p className="recipe-opis">{odprtRecept.opis}</p>}
+
+                        {odprtRecept.sestavine && (
+                            <div className="detail-block modal-block">
+                                <strong>Sestavine:</strong>
+                                {/* vsaka sestavina je svoja točka v seznamu */}
+                                <ul className="ingredient-list">
+                                    {razdeliSestavine(odprtRecept.sestavine).map((sestavina, i) => (
+                                        <li key={i}>{sestavina}</li>
+                                    ))}
+                                </ul>
+                            </div>
+                        )}
+
+                        {odprtRecept.navodila && (
+                            <div className="detail-block modal-block">
+                                <strong>Navodila:</strong>
+                                <p className="detail-text">{odprtRecept.navodila}</p>
+                            </div>
+                        )}
+                    </div>
                 </div>
             )}
         </div>

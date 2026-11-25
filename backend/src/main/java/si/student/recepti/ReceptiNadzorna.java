@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Tag(name = "Recepti")
@@ -18,7 +17,7 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/api/recepti")
 public class ReceptiNadzorna {
-    // začetne kategorije; uporabnik lahko vpiše tudi svojo
+    // fiksen seznam kategorij, ki jih lahko izbere uporabnik
     private static final List<String> KATEGORIJE = List.of("Predjed", "Glavna jed", "Priloga", "Juha", "Sladica", "Pijača");
     // kategorija, ki jo dobi recept, če uporabnik ne izbere nobene
     private static final String BREZ_KATEGORIJE = "Brez kategorije";
@@ -36,53 +35,44 @@ public class ReceptiNadzorna {
         return shrambaReceptov.findAll(); // findAll() prebere vse vrstice iz tabele, Spring vrne JSON
     }
 
-    // vrne začetne kategorije in kategorije, ki jih je uporabnik že vpisal pri receptih
+    // vrne seznam kategorij za spustni meni v obrazcu
     @Operation(summary = "Vrne seznam kategorij receptov")
     @GetMapping("/kategorije")
     public List<String> pridobiKategorije() {
-        List<String> vse = new ArrayList<>(KATEGORIJE);
-        for (String k : shrambaReceptov.najdiKategorije()) {
-            // "Brez kategorije" ni prava kategorija, zato je ne ponujamo
-            if (!vse.contains(k) && !k.equals(BREZ_KATEGORIJE)) {
-                vse.add(k);
-            }
-        }
-        return vse;
+        return KATEGORIJE;
     }
 
-    // počisti vpisano kategorijo; če je prazna, vrne "Brez kategorije"
+    // če kategorija ni podana, recept dobi "Brez kategorije"
     private String preveriKategorijo(String kategorija) {
-        if (kategorija == null || kategorija.trim().isEmpty()) {
+        if (kategorija == null || kategorija.isEmpty()) {
             return BREZ_KATEGORIJE;
         }
-        String ociscena = kategorija.trim();
-        if (ociscena.length() > 50) {
-            ociscena = ociscena.substring(0, 50); // kategorija je lahko dolga največ 50 znakov
-        }
-        return ociscena;
+        return kategorija;
     }
 
-    // iskanje in paginacija: vrne samo eno stran receptov
+    // iskanje, filter po kategoriji in paginacija: vrne samo eno stran receptov
     // iskanje = besedilo, ki ga iščemo v imenu ali sestavinah (prazno = vsi recepti)
-    // kategorija = neobvezen filter; prazna vrednost pomeni vse kategorije
+    // kategorija = izbrana kategorija (prazno = vse kategorije)
     // stran = številka strani (prva stran je 0), velikost = število receptov na strani
-    @Operation(summary = "Vrne recepte po straneh, z iskanjem in neobveznim filtrom kategorije")
+    @Operation(summary = "Vrne recepte po straneh, z iskanjem po imenu in sestavinah ter filtrom po kategoriji")
     @GetMapping("/stran")
     public Page<Recepti> pridobiStran(
             @RequestParam(defaultValue = "") String iskanje,
             @RequestParam(defaultValue = "") String kategorija,
             @RequestParam(defaultValue = "0") int stran,
-            @RequestParam(defaultValue = "5") int velikost) {
+            @RequestParam(defaultValue = "3") int velikost) {
 
         // najnovejši recepti (z največjim ID-jem) so na vrhu
         Pageable strani = PageRequest.of(stran, velikost, Sort.by("id").descending());
 
-        if (kategorija != null && !kategorija.isBlank()) {
-            return shrambaReceptov.najdiPoKategorijiInIskanju(kategorija.trim(), iskanje, strani);
+        // če kategorija ni izbrana, iščemo po vseh receptih
+        if (kategorija.isEmpty()) {
+            // isti niz iščemo v imenu in v sestavinah
+            return shrambaReceptov.findByImeContainingIgnoreCaseOrSestavineContainingIgnoreCase(iskanje, iskanje, strani);
         }
 
-        // brez filtra kategorije ohranimo obstoječe iskanje po imenu in sestavinah
-        return shrambaReceptov.findByImeContainingIgnoreCaseOrSestavineContainingIgnoreCase(iskanje, iskanje, strani);
+        // sicer iščemo samo med recepti izbrane kategorije
+        return shrambaReceptov.najdiPoKategorijiInIskanju(kategorija, iskanje, strani);
     }
 
     // prebere točno določeno vrstico

@@ -16,7 +16,7 @@ Predmet: Razvoj informacijskih sistemov (RIS) <br>
 
 - [Vizija projekta](#vizija-projekta)
 - [Besednjak](#besednjak)
-- [Diagram primerov uporabe](#diagram-primera-uporabe)
+- [Diagram primerov uporabe](#diagram-primerov-uporabe)
 1. [O projektu](#1-o-projektu)
 2. [Uporabljene tehnologije](#2-uporabljene-tehnologije)
 3. [Struktura projekta](#3-struktura-projekta)
@@ -37,8 +37,8 @@ Aplikacija za recepte je spletno mesto, kjer uporabniki delijo recepte in se o n
 - urejanje in brisanje lastnih receptov,
 - administrator briše recepte in komentarje, ki kršijo pravila.
 
-## Obseg rešitve in omejitve
-Aplikacija je spletna in namenjena objavi besedilnih receptov. Slik, videoposnetkov, zasebnih sporočil med uporabniki in ocen z zvezdicami v prvi različici ni. Komentarje lahko pišejo samo prijavljeni uporabniki, svojih komentarjev pa ne morejo urejati. Za vsebino skrbi administrator, avtomatskega filtriranja besedila ni.
+### Obseg rešitve in omejitve
+Aplikacija je spletna in namenjena objavi besedilnih receptov. Slik, videoposnetkov, zasebnih sporočil med uporabniki in ocen z zvezdicami v prvi različici ni. Komentarje lahko pišejo samo prijavljeni uporabniki, svojih komentarjev pa ne morejo urejati. Za vsebino skrbi administrator, avtomatskega filtriranja besedila ni. V trenutni različici še ni uporabniških računov in prijave, zato so vse funkcije dostopne vsem. Vloge (gost, registriran uporabnik, administrator) so predvidene v nadaljevanju.
 
 ## Besednjak
 
@@ -55,12 +55,12 @@ Aplikacija je spletna in namenjena objavi besedilnih receptov. Slik, videoposnet
 | **Registriran uporabnik** | Uporabnik z ustvarjenim računom, ki je prijavljen v aplikacijo. Lahko dodaja, ureja in briše svoje recepte ter recepte všečka in komentira. |
 | **Administrator**         | Uporabnik s posebnimi skrbniškimi pravicami za upravljanje vsebine aplikacije in pomoč pri njenem delovanju. |
 | **Všečkanje**             | Dejanje, s katerim prijavljen uporabnik označi recept kot priljubljenega. Število všečkov je prikazano ob receptu; s ponovnim pritiskom lahko uporabnik svoj všeček odstrani. |
-| **Kategorija recepta**    | Skupina, v katero spada recept, na primer predjed, glavna jed ali sladica. Uporabnik jo izbere ob dodajanju recepta, po njej pa lahko gost ali registriran uporabnik recepte tudi filtrira. |
+| **Kategorija recepta**    | Skupina, v katero spada recept, ena od fiksnih skupin: predjed, glavna jed, priloga, juha, sladica ali pijača. Uporabnik jo izbere ob dodajanju recepta, po njej pa lahko gost ali registriran uporabnik recepte tudi filtrira. |
 | **Komentar**              | Besedilo, ki ga prijavljen uporabnik napiše pod receptom, da z drugimi deli mnenje ali nasvet. Komentar je viden vsem obiskovalcem, administrator pa ga lahko izbriše, če krši pravila. |
 
 ---
 
-## Diagram primera uporabe
+## Diagram primerov uporabe
 ![DPU](docs/DPU.png)
 
 - [Primeri uporabe](docs/PrimeriUporabe.md)
@@ -79,7 +79,9 @@ Aplikacija uporabniku omogoča, da na enem mestu hrani svoje recepte. Zaledje (b
 **Funkcionalnosti**
 - dodajanje, pregledovanje (vseh in enega recepta), posodabljanje in brisanje receptov (CRUD),
 - iskanje receptov po imenu ali sestavinah (ne razlikuje velikih in malih črk),
+- izbira kategorije recepta iz fiksnega seznama (predjed, glavna jed, priloga, juha, sladica, pijača); recept brez izbire dobi kategorijo »Brez kategorije«,
 - filtriranje receptov po kategoriji, tudi skupaj z iskanjem,
+- všečkanje receptov (števec všečkov; prijave še ni, zato si obličje zapomni všečkane recepte v brskalniku),
 - paginacija seznama (obličje zahteva 3 recepte na stran, najnovejši so zgoraj).
 
 ### Podatkovni model
@@ -94,6 +96,7 @@ Tabela `recepti` (ustvari se samodejno ob prvem zagonu zaledja):
 | `navodila`     | `varchar(5000)`        | postopek priprave                     |
 | `cas_priprave` | `integer`              | čas priprave v minutah                |
 | `kategorija`   | `varchar(255)`         | kategorija recepta                    |
+| `vseckov`      | `integer`              | število všečkov recepta (privzeto 0)  |
 
 
 
@@ -104,10 +107,12 @@ Osnovni naslov: `http://localhost:8080/api/recepti`
 |----------|-------------------------|----------------------------------------------------------------------------------------------|------------------------|
 | `GET`    | `/api/recepti`          | vrne vse recepte                                                                             | 200                    |
 | `GET`    | `/api/recepti/stran`    | vrne eno stran receptov, z iskanjem (`iskanje`), filtrom kategorije (`kategorija`) in paginacijo (`stran`, `velikost`; privzeta velikost je 3) | 200 |
-| `GET`    | `/api/recepti/kategorije` | vrne razpoložljive kategorije receptov                                                    | 200 |
+| `GET`    | `/api/recepti/kategorije` | vrne fiksen seznam kategorij receptov                                                     | 200 |
 | `GET`    | `/api/recepti/{id}`     | vrne en recept                                                                               | 200 / 404              |
 | `POST`   | `/api/recepti`          | doda nov recept                                                                              | 200                    |
 | `PUT`    | `/api/recepti/{id}`     | posodobi obstoječi recept                                                                    | 200 / 404              |
+| `POST`   | `/api/recepti/{id}/vseck` | poveča število všečkov recepta za 1                                                        | 200 / 404              |
+| `DELETE` | `/api/recepti/{id}/vseck` | zmanjša število všečkov recepta za 1 (ne pod 0)                                            | 200 / 404              |
 | `DELETE` | `/api/recepti/{id}`     | izbriše recept                                                                               | 204 / 404              |
 
 Interaktivna dokumentacija (Swagger UI) je na `http://localhost:8080/swagger-ui/index.html`.
@@ -148,6 +153,10 @@ Interaktivna dokumentacija (Swagger UI) je na `http://localhost:8080/swagger-ui/
 recepti-app/
 ├── README.md
 ├── .gitignore
+├── docs/                                 # diagram in dokumentacija
+│   ├── DPU.png                           # diagram primerov uporabe
+│   ├── PrimeriUporabe.md                 # podrobni opisi primerov uporabe
+│   └── user-stories.md                   # uporabniške zgodbe in sprejemni kriteriji
 ├── postman/                              # zbirka zahtev za Postman
 ├── backend/                              # zaledje (Spring Boot, Maven)
 │   ├── .gitattributes
@@ -187,7 +196,7 @@ recepti-app/
 |---------------------------|-------------------------------------------------------------------------|
 | `BackendApplication.java` | vstopna točka, zažene Spring Boot                                       |
 | `Recepti.java`            | entiteta, ki predstavlja tabelo `recepti`                               |
-| `ReceptiRepository.java`  | vmesnik za delo z bazo (CRUD in iskanje po straneh)                     |
+| `ReceptiRepository.java`  | vmesnik za delo z bazo (CRUD, iskanje po straneh, iskanje znotraj kategorije)                     |
 | `ReceptiNadzorna.java`    | kontroler z REST end pointi in opisi za Swagger                         |
 | `application.properties`  | nastavitve aplikacije in povezave z bazo (vrednosti iz okoljskih spremenljivk) |
 | `pom.xml`                 | odvisnosti in nastavitve gradnje                                        |
@@ -198,7 +207,7 @@ recepti-app/
 |------------------------|-------------------------------------------------------------------------------|
 | `index.html`           | osnovna stran z elementom `root`                                              |
 | `src/main.jsx`         | vstopna točka, izriše komponento `App`                                        |
-| `src/App.jsx`          | vsa logika in uporabniški vmesnik (obrazec, seznam, iskanje, paginacija, klici na zaledje) |
+| `src/App.jsx`          | vsa logika in uporabniški vmesnik (obrazec, seznam, iskanje, kategorije, všečki, paginacija, klici na zaledje) |
 | `src/App.css`          | stili aplikacije                                                              |
 | `src/index.css`        | globalni stili (trenutno prazna)                                              |
 | `public/`              | statične datoteke, ki se prenesejo brez obdelave                              |
@@ -212,6 +221,7 @@ recepti-app/
 | Mapa / datoteka | Vsebina                                                  |
 |-----------------|----------------------------------------------------------|
 | `postman/`      | zbirka zahtev za preizkušanje API-ja v Postmanu          |
+| `docs/`         | diagram primerov uporabe, opisi primerov uporabe in uporabniške zgodbe |
 | `.gitignore`    | datoteke in mape, ki se ne shranjujejo v repozitorij (ločena datoteka v korenu, v `backend/` in v `frontend/`, vsaka velja za svojo mapo) |
 
 ---

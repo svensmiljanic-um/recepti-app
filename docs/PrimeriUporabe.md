@@ -24,8 +24,8 @@
 | **Predpogoji:** | Uporabnik ima odprt ogled receptov (primer uporabe »Ogled receptov«). V sistemu obstaja vsaj ena kategorija. |
 | **Stanje sistema po PU:** | Podatki v bazi se ne spremenijo. Seznam receptov je omejen na izbrano kategorijo, dokler uporabnik filtra ne odstrani. |
 | **Scenarij:** | 1. Uporabnik na seznamu receptov odpre izbiro kategorij.<br> 2. Sistem prikaže seznam razpoložljivih kategorij.<br> 3. Uporabnik izbere kategorijo.<br> 4. Sistem poišče recepte izbrane kategorije.<br> 5. Sistem prikaže prvo stran ujemajočih receptov in izbrano kategorijo označi kot aktivno. |
-| **Alternativni tokovi:** | 3a. Uporabnik izbere več kategorij: sistem prikaže recepte, ki spadajo v katero koli od izbranih kategorij.<br> 3b. Uporabnik poleg kategorije vpiše iskalni niz: sistem prikaže recepte, ki ustrezajo obema pogojema.<br> 4a. V izbrani kategoriji ni receptov: sistem prikaže sporočilo »V tej kategoriji še ni receptov«.<br> 5a. Uporabnik izbere »Vse kategorije«: sistem odstrani filter in prikaže vse recepte. |
-| **Izjeme:** | - Seznama kategorij ni mogoče naložiti: sistem prikaže sporočilo o napaki, seznam receptov pa ostane nespremenjen in ga je še vedno mogoče pregledovati brez filtra.<br> - Izbrana kategorija medtem ne obstaja več: sistem prikaže obvestilo in osveži seznam kategorij. |
+| **Alternativni tokovi:** | 3a. Uporabnik poleg kategorije vpiše iskalni niz: sistem prikaže recepte, ki ustrezajo obema pogojema.<br> 4a. V izbrani kategoriji ni receptov: sistem prikaže sporočilo »V tej kategoriji še ni receptov«.<br> 5a. Uporabnik izbere »Vse kategorije«: sistem odstrani filter in prikaže vse recepte. |
+| **Izjeme:** | - Seznama kategorij ni mogoče naložiti: sistem prikaže sporočilo o napaki, seznam receptov pa ostane nespremenjen in ga je še vedno mogoče pregledovati brez filtra. |
 
 ## Komentiranje receptov
 
@@ -52,7 +52,7 @@
 | **Predpogoji:** | Uporabnik je prijavljen in je v postopku dodajanja recepta (primer uporabe »Dodajanje novega recepta«, ki ta primer uporabe vključuje). V sistemu obstaja vsaj ena kategorija. |
 | **Stanje sistema po PU:** | Recept je ob shranjevanju povezan z izbrano kategorijo. |
 | **Scenarij:** | 1. Uporabnik v obrazcu za nov recept odpre izbiro kategorij.<br> 2. Sistem prikaže seznam razpoložljivih kategorij.<br> 3. Uporabnik izbere kategorijo.<br> 4. Sistem izbrano kategorijo prikaže v obrazcu.<br> 5. Ob shranjevanju recepta sistem zapiše tudi kategorijo. |
-| **Alternativni tokovi:** | 3a. Uporabnik kategorije ne izbere: sistem recept shrani v privzeto kategorijo »Brez kategorije«.<br> 3b. Uporabnik izbere več kategorij: sistem recept poveže z vsemi izbranimi.<br> 5a. Izbrana kategorija medtem ne obstaja več: sistem prikaže opozorilo in uporabnika pozove k novi izbiri (nazaj na korak 3). |
+| **Alternativni tokovi:** | 3a. Uporabnik kategorije ne izbere: sistem recept shrani v privzeto kategorijo »Brez kategorije«. |
 | **Izjeme:** | - Seznama kategorij ni mogoče naložiti: sistem omogoči shranjevanje recepta brez kategorije in prikaže opozorilo.<br> - Napaka pri shranjevanju: sistem recepta ne shrani, ohrani vnesene podatke v obrazcu in prikaže sporočilo o napaki. |
 
 ## Brisanje receptov
