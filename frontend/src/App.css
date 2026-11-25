@@ -208,6 +208,28 @@ body {
   border-top: 1px solid #eeeeee;
 }
 
+.btn-like {
+  padding: 6px 12px;
+  background-color: #ffffff;
+  color: #db2777;
+  border: 1px solid #db2777;
+  border-radius: 4px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.btn-like-active {
+  background-color: #db2777;
+  color: #ffffff;
+}
+
+.like-count {
+  align-self: center;
+  font-size: 13px;
+  color: #555555;
+  margin-right: auto;
+}
+
 .btn-edit {
   padding: 6px 12px;
   background-color: #2563eb;

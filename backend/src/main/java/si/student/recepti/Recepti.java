@@ -27,6 +27,8 @@ public class Recepti {
     // kategorija recepta (npr. Juha, Sladica); če je uporabnik ne izbere, se shrani "Brez kategorije"
     private String kategorija;
 
+    private Integer vseckov = 0;
+
     public Recepti() {
     }
 
@@ -58,6 +60,10 @@ public class Recepti {
         return kategorija;
     }
 
+    public int getVseckov() {
+        return vseckov == null ? 0 : vseckov;
+    }
+
     public void setIme(String ime) {
         this.ime = ime;
     }
@@ -80,5 +86,9 @@ public class Recepti {
 
     public void setKategorija(String kategorija) {
         this.kategorija = kategorija;
+    }
+
+    public void setVseckov(int vseckov) {
+        this.vseckov = vseckov;
     }
 }

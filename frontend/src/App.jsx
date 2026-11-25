@@ -20,6 +20,15 @@ function App() {
     const [novaKategorija, setNovaKategorija] = useState(''); // besedilo, ko uporabnik izbere "Nova kategorija..."
     const [napakaKategorije, setNapakaKategorije] = useState(false); // true, če kategorij ni bilo mogoče naložiti
 
+    const [vseckani, setVseckani] = useState(() => {
+        try {
+            return JSON.parse(localStorage.getItem('vseckani')) || [];
+        } catch {
+            return [];
+        }
+    });
+    const [napakaVseck, setNapakaVseck] = useState(false);
+
     const [formData, setFormData] = useState({ //vrednosti polj v obrazcu
         ime: '',
         opis: '',
@@ -33,6 +42,10 @@ function App() {
     useEffect(() => {
         fetchRecipes();
     }, [stran, iskanje, filterKategorija]);
+
+    useEffect(() => {
+        localStorage.setItem('vseckani', JSON.stringify(vseckani));
+    }, [vseckani]);
 
     // kategorije preberemo samo enkrat, ob zagonu strani
     useEffect(() => {
@@ -145,6 +158,20 @@ function App() {
             } catch (error) {
                 console.error('Napaka pri brisanju recepta:', error);
             }
+        }
+    };
+
+    const handleLike = async (recipe) => {
+        const jeVseckan = vseckani.includes(recipe.id);
+        try {
+            const response = jeVseckan
+                ? await axios.delete(`${API_URL}/${recipe.id}/vseck`)
+                : await axios.post(`${API_URL}/${recipe.id}/vseck`);
+            setRecipes((prejsnji) => prejsnji.map((r) => (r.id === recipe.id ? response.data : r)));
+            setVseckani((prejsnji) => jeVseckan ? prejsnji.filter((id) => id !== recipe.id) : [...prejsnji, recipe.id]);
+            setNapakaVseck(false);
+        } catch {
+            setNapakaVseck(true);
         }
     };
 
@@ -300,6 +327,12 @@ function App() {
                 </p>
             )}
 
+            {napakaVseck && (
+                <p className="warning-text" role="alert">
+                    Všečka ni bilo mogoče shraniti
+                </p>
+            )}
+
             {recipes.length === 0 ? (
                 <p className="empty-state">
                     {filterKategorija
@@ -342,6 +375,13 @@ function App() {
                             </div>
 
                             <div className="card-actions">
+                                <button
+                                    onClick={() => handleLike(recipe)}
+                                    className={vseckani.includes(recipe.id) ? 'btn-like btn-like-active' : 'btn-like'}
+                                >
+                                    {vseckani.includes(recipe.id) ? 'Odstrani všeček' : 'Všečkaj'}
+                                </button>
+                                <span className="like-count">Všečkov: {recipe.vseckov || 0}</span>
                                 <button onClick={() => handleEdit(recipe)} className="btn-edit">
                                     Uredi
                                 </button>

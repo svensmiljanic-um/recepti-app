@@ -130,6 +130,32 @@ public class ReceptiNadzorna {
         return new ResponseEntity<>(shranjenRecept, HttpStatus.OK);
     }
 
+    @Operation(summary = "Doda všeček receptu")
+    @PostMapping("/{id}/vseck")
+    public ResponseEntity<Recepti> dodajVseck(@PathVariable Long id) {
+        Recepti recept = shrambaReceptov.findById(id).orElse(null);
+
+        if (recept == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        recept.setVseckov(recept.getVseckov() + 1);
+        return new ResponseEntity<>(shrambaReceptov.save(recept), HttpStatus.OK);
+    }
+
+    @Operation(summary = "Odstrani všeček receptu")
+    @DeleteMapping("/{id}/vseck")
+    public ResponseEntity<Recepti> odstraniVseck(@PathVariable Long id) {
+        Recepti recept = shrambaReceptov.findById(id).orElse(null);
+
+        if (recept == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        recept.setVseckov(Math.max(0, recept.getVseckov() - 1));
+        return new ResponseEntity<>(shrambaReceptov.save(recept), HttpStatus.OK);
+    }
+
     @Operation(summary = "Izbriše recept")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> izbrisiRecept(@PathVariable Long id) {
